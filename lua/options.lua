@@ -81,4 +81,7 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Automatically change working dir to folder for the active file.
+vim.opt.autochdir = true
+
 -- vim: ts=2 sts=2 sw=2 et
