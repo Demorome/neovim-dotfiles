@@ -1,6 +1,14 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+--  Map CTRL+Z to undo.
+vim.keymap.set('n', '<C-z>', 'u')
+
+-- Remap Enter and Shift-Enter to create newlines in Normal mode.
+-- Credits to: https://www.reddit.com/r/neovim/comments/10kah18/comment/j5rueyw/
+vim.keymap.set('n', '<CR>', '@="m`o<C-V><Esc>``"<CR>')
+vim.keymap.set('n', '<S-CR>', '@="m`O<C-V><Esc>``"<CR>')
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -40,10 +48,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -73,3 +81,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.keymap.set('', '<leader>y', '"+y', { desc = 'Yank to clipboard' }) -- E.g: <leader>yy will yank current line to os clipboard
+vim.keymap.set('', '<leader>Y', '"+y$', { desc = 'Yank until EOL to clipboard' })
+vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste after cursor from clipboard' })
+vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor from clipboard' })
