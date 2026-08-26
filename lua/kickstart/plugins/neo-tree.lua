@@ -17,4 +17,14 @@ require('neo-tree').setup {
       },
     },
   },
+
+  event_handlers = {
+    {
+      event = "file_opened",
+      handler = function(file_path)
+        -- This automatically hides Neo-tree when a file is opened
+        require("neo-tree.command").execute({ action = "close" })
+      end
+    },
+  }
 }

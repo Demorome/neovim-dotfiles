@@ -1,6 +1,13 @@
 -- Enable faster startup by caching compiled Lua modules
 vim.loader.enable()
 
+-- Folding options
+vim.opt.foldcolumn = "1"
+vim.opt.foldtext = ""
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 1
+vim.opt.foldnestmax = 4
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
