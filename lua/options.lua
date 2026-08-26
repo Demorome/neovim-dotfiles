@@ -1,6 +1,19 @@
 -- Enable faster startup by caching compiled Lua modules
 vim.loader.enable()
 
+vim.opt.wrap = false
+
+-- Enable break indent
+-- Only relevant if line wrap is enabled
+vim.o.breakindent = true
+
+vim.opt.tabstop = 4 -- tab width
+vim.opt.shiftwidth = 4 -- indent width
+vim.opt.softtabstop = 4 -- no idea?
+vim.opt.expandtab = true -- use spaces instead of tab
+vim.opt.smartindent = true
+vim.opt.autoindent = true
+
 -- Folding options
 vim.opt.foldcolumn = "1"
 vim.opt.foldtext = ""
@@ -40,18 +53,21 @@ vim.o.showmode = false
 --  See `:help 'clipboard'`
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
--- Enable break indent
-vim.o.breakindent = true
-
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.opt.hlsearch = true -- highlight search matches
+vim.opt.incsearch = true --show matches as you type
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
+vim.opt.colorcolumn = "100" --show a column to discourage long lines
+
+--vim.opt.cmdheight = 1
+--vim.opt.pumheight = 5
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -82,6 +98,7 @@ vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
+vim.opt.sidescrolloff = 10
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
