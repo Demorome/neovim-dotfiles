@@ -1,5 +1,8 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 
+-- Make diagnostics more readable by adding a floating window.
+require('custom.plugins.custom.diagnostics').setup()
+
 -- [[ LSP Configuration ]]
 -- Brief aside: **What is LSP?**
 --

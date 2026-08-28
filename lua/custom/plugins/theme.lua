@@ -19,4 +19,16 @@ local function gh(repo) return 'https://github.com/' .. repo end
 -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
 -- vim.cmd.colorscheme 'tokyonight-night'
 
+vim.pack.add({
+  'https://github.com/mrpbennett/vault'
+})
+
+require('vault').setup({
+     overrides = {
+     Comment = { italic = false }, -- Disable italics in comments
+   },
+})
+
+vim.cmd.colorscheme 'vault'
+
 -- vim: ts=2 sts=2 sw=2 et
