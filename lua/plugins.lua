@@ -31,6 +31,7 @@ require 'custom.plugins.easy-dotnet-nvim'
 require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
 require 'custom.plugins.nvim-orgmode'
 require 'custom.plugins.lazygit'
+require 'custom.plugins.arrow' -- adds bookmarks
 
 -- TODO: Set up rainbow delimiters plugin
 
