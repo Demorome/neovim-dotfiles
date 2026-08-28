@@ -30,6 +30,7 @@ require 'custom.plugins.easy-dotnet-nvim'
 -- Load order for these shouldn't matter
 require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
 require 'custom.plugins.nvim-orgmode'
+require 'custom.plugins.lazygit'
 
 -- TODO: Set up rainbow delimiters plugin
 

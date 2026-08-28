@@ -31,7 +31,10 @@ require('custom.plugins.custom.diagnostics').setup()
 
 -- Useful status updates for LSP.
 vim.pack.add { gh 'j-hui/fidget.nvim' }
-require('fidget').setup {}
+require('fidget').setup {
+  -- TODO: Change text color to be darker, to blend in with background!
+ -- vim.api.nvim_set_hl(0, 'FidgetTask', { fg = '#f0a4d0', bg = 'NONE' })
+}
 
 --  This function gets run when an LSP attaches to a particular buffer.
 --    That is to say, every time a new file is opened that is associated with
