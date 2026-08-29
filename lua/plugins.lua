@@ -18,7 +18,7 @@ require 'kickstart.plugins.indent_line'
 require 'kickstart.plugins.lint'
 require 'kickstart.plugins.autopairs'
 
-require 'custom.plugins.oil'
+require 'custom.plugins.directory-viewer'
 require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
 require 'custom.plugins.easy-dotnet-nvim'
@@ -31,7 +31,7 @@ require 'custom.plugins.easy-dotnet-nvim'
 require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
 require 'custom.plugins.nvim-orgmode'
 require 'custom.plugins.lazygit'
-require 'custom.plugins.arrow' -- adds bookmarks
+require 'custom.plugins.bookmarks' -- adds bookmarks
 
 -- TODO: Set up rainbow delimiters plugin
 
