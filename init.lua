@@ -90,6 +90,9 @@ require 'options'
 -- [[ Basic Keymaps ]]
 require 'keymaps'
 
+-- [[ Basic Autocommands ]]
+require 'autocommands'
+
 -- [[ Set up vim.pack ]]
 require 'pack'
 
