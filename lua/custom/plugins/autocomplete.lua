@@ -15,6 +15,22 @@ require('luasnip').setup {}
 -- require('luasnip.loaders.from_vscode').lazy_load()
 
 -- [[ Autocomplete Engine ]]
+
+-- Credits to @beetol for this workaround: https://github.com/saghen/blink.cmp/discussions/564#discussioncomment-16384207
+local function in_comment()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local parser = vim.treesitter.get_parser(0)
+  if not parser then return false end
+  parser:parse()
+  local node = vim.treesitter.get_node({ pos = { row - 1, math.max(0, col - 1) } })
+  if not node then return false end
+  while node do
+    if node:type() == 'comment' then return true end
+    node = node:parent()
+  end
+  return false
+end
+
 vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
 require('blink.cmp').setup {
   keymap = {

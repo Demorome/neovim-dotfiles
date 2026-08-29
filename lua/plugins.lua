@@ -11,7 +11,7 @@ require 'kickstart.plugins.telescope' -- fuzzy-finding tools
 require 'custom.plugins.lspconfig'
 
 require 'kickstart.plugins.conform'
-require 'kickstart.plugins.blink-cmp'
+require 'custom.plugins.autocomplete'
 require 'kickstart.plugins.treesitter'
 require 'kickstart.plugins.debug'
 require 'kickstart.plugins.indent_line'
