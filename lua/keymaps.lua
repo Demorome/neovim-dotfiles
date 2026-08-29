@@ -1,6 +1,10 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Quick-saving keybind.
+-- Calling update has the advantage of not doing anything if the file wasn't changed.
+vim.keymap.set('n', '<leader>w', '<cmd>:echo "Saved file (no changes)"<CR><cmd>:update<CR>', { desc = "Save the file"})
+
 --  Map CTRL+Z to undo.
 vim.keymap.set('n', '<C-z>', 'u')
 
