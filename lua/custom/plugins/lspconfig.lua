@@ -1,7 +1,40 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 
--- Make diagnostics more readable by adding a floating window.
-require('custom.plugins.custom.diagnostics').setup()
+vim.keymap.set('n', 'K', function()
+  vim.lsp.buf.hover({
+    max_width = 80,
+    max_height = 20,
+    --border = 'rounded',  -- or 'single', 'double', 'solid', 'shadow', none'
+  })
+end, { desc = "Open LSP Info (Function docs, etc.)" })
+
+-- See ":h diagnostic-defaults" for default diagnostic keybinds.
+-- Notably, <C-w>d shows diagnostics at cursor in a floating window.
+vim.diagnostic.config({
+  severity_sort = true,
+  underline = true, -- call attention to diagnostics
+  virtual_text = false,
+ -- virtual_text = { format = function(diagnostic)
+--    return diagnosti
+ -- end} -- disable default inline diagnostics
+})
+
+-- Auto-open diagnostics popup when hovering over a line with one.
+-- Only applies to Errors and Warnings; use <C-w>d for lesser diagnostics.
+-- Only opens it if in Normal mode, mostly to avoid annoying pop-ups while in Insert mode.
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  callback = function()
+    -- Check for Normal mode
+    if (string.find(vim.api.nvim_get_mode().mode, 'n', 1)) then
+      local row, _ = unpack(vim.api.nvim_win_get_cursor( vim.api.nvim_get_current_win() ))
+      local counts = vim.diagnostic.count(0, { lnum = row, severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR } })
+      -- Check if there are any diagnostics on the current line with the given severity.
+      if (next(counts) ~= nil) then
+        vim.diagnostic.open_float(nil, { focus = false })
+      end
+    end
+  end
+})
 
 -- [[ LSP Configuration ]]
 -- Brief aside: **What is LSP?**
