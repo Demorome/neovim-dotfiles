@@ -8,6 +8,8 @@ vim.keymap.set('n', 'K', function()
   }
 end, { desc = 'Open LSP Info (Function docs, etc.)' })
 
+local diagnosticSymbols = { ' ', ' ', ' ', '󰴲 ' }
+
 -- See ":h diagnostic-defaults" for default diagnostic keybinds.
 -- Notably, <C-w>d shows diagnostics at cursor in a floating window.
 vim.diagnostic.config {
@@ -15,7 +17,14 @@ vim.diagnostic.config {
   underline = true, -- call attention to diagnostics
   virtual_text = false, -- disable inline diagnostics display (it usually makes for lines that are too long to read anyways)
   -- Use icons instead of the default text ("E" for Errors, etc.).
-  signs = { text = { [vim.diagnostic.severity.ERROR] = 'E' } },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = diagnosticSymbols[1],
+      [vim.diagnostic.severity.WARN] = diagnosticSymbols[2],
+      [vim.diagnostic.severity.INFO] = diagnosticSymbols[3],
+      [vim.diagnostic.severity.HINT] = diagnosticSymbols[4],
+    },
+  },
 }
 -- Auto-open diagnostics popup when hovering over a line with one.
 -- Only applies to Errors and Warnings; use <C-w>d for lesser diagnostics.

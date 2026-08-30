@@ -33,6 +33,8 @@ require('mini.ai').setup {
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require('mini.surround').setup()
 
+local diagnosticSymbols = { ' ', ' ', ' ', '󰴲 ' }
+
 local statusline = require 'mini.statusline'
 statusline.setup {
   use_icons = vim.g.have_nerd_font,
@@ -44,7 +46,7 @@ statusline.setup {
       local diff = MiniStatusline.section_diff { trunc_width = 75 }
       local diagnostics = MiniStatusline.section_diagnostics {
         trunc_width = 75,
-        signs = { ERROR = '!', WARN = '?', INFO = '@', HINT = '*' },
+          signs = { ERROR = diagnosticSymbols[1], WARN = diagnosticSymbols[2], INFO = diagnosticSymbols[3], HINT = diagnosticSymbols[4] },
       }
       -- local lsp           = MiniStatusline.section_lsp({ trunc_width = 75 })
       --local filename = MiniStatusline.section_filename { trunc_width = 140 }
