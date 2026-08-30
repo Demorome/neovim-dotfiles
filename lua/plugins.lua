@@ -4,7 +4,7 @@ require 'kickstart.plugins.guess-indent'
 require 'kickstart.plugins.gitsigns'
 require 'kickstart.plugins.which-key' -- show hints about what key combinations are possible
 require 'custom.plugins.theme' -- set visual theme.
-require 'kickstart.plugins.todo-comments' -- highlight TODO comments
+require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
 
 require 'custom.plugins.mini' -- a bunch of mini plugins
 require 'kickstart.plugins.telescope' -- fuzzy-finding tools
@@ -19,13 +19,9 @@ require 'kickstart.plugins.lint'
 require 'kickstart.plugins.autopairs'
 
 require 'custom.plugins.directory-viewer'
-require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+require 'kickstart.plugins.gitsigns' -- also adds gitsigns recommended keymaps
 
 require 'custom.plugins.easy-dotnet-nvim'
-
--- Changes the look of the taskbar/line.
--- Loaded last, since it might require some plugins for custom elements.
---require 'custom.plugins.lualine'
 
 -- Load order for these shouldn't matter
 require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
