@@ -27,15 +27,24 @@ vim.diagnostic.config {
     },
   },
 }
+
 -- Auto-open diagnostics popup when hovering over a line with one.
 -- Only applies to Errors and Warnings; use <C-w>d for lesser diagnostics.
 -- Only opens it if in Normal mode, mostly to avoid annoying pop-ups while in Insert mode.
--- NOTE: Will still be temporarily open if you switch from Normal mode; just move or type something.
+Diagnostic_WindowID = nil
 vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   callback = function()
     -- Check for Normal mode
     if string.find(vim.api.nvim_get_mode().mode, 'n', 1) then
-      vim.diagnostic.open_float(nil, { focus = false, severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR } })
+      _, Diagnostic_WindowID = vim.diagnostic.open_float(nil, {
+        focus = false,
+        severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
+      })
+    else
+      if Diagnostic_WindowID ~= nil then
+        if vim.api.nvim_win_is_valid(Diagnostic_WindowID) then vim.api.nvim_win_close(Diagnostic_WindowID, false) end
+        Diagnostic_WindowID = nil
+      end
     end
   end,
 })
@@ -70,7 +79,7 @@ vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
 vim.pack.add { gh 'j-hui/fidget.nvim' }
 require('fidget').setup {
   -- TODO: Change text color to be darker, to blend in with background!
-  -- vim.api.nvim_set_hl(0, 'FidgetTask', { fg = '#f0a4d0', bg = 'NONE' })
+  --done_style = vim.api.nvim_get_hl()
 }
 
 --  This function gets run when an LSP attaches to a particular buffer.
