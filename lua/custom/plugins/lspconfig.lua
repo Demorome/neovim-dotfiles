@@ -8,6 +8,7 @@ vim.keymap.set('n', 'K', function()
   }
 end, { desc = 'Open LSP Info (Function docs, etc.)' })
 
+-- Note the extra space for each string: it allows the icon to take more width.
 local diagnosticSymbols = { ' ', ' ', ' ', '󰴲 ' }
 
 -- See ":h diagnostic-defaults" for default diagnostic keybinds.
