@@ -80,13 +80,11 @@ statusline.setup {
         { hl = mode_hl, strings = { string.upper(mode) } },
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics } },
         '%<', -- Mark general truncate point
-        -- Show file's directory in grayed-out text.
-        { hl = 'MiniStatuslineFilename', strings = { getFileDirectory() } },
-        -- Show filename in brighter text.
-        -- TODO: Convince plugin author to allow overriding spacing here, since two spaces are currently introduced.
-        { hl = 'MiniStatuslineFileinfo', strings = { vim.fn.expand '%:t' } },
+        -- Show file's directory in grayed-out text, then filename in brighter text.
+        { hl = 'MiniStatuslineFilename', strings = { getFileDirectory() .. '%#MiniStatuslineFileinfo#' ..  vim.fn.expand '%:t' } },
         '%=', -- End left alignment
-        { hl = 'MiniStatuslineFileinfo', strings = { fileInfo() } },
+        -- Show file info in grayed-out text.
+        { hl = 'MiniStatuslineFilename', strings = { fileInfo() } },
         { hl = mode_hl, strings = { search, location } },
       }
     end,
