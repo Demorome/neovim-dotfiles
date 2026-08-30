@@ -63,6 +63,8 @@ vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   end,
 })
 
+-- TODO: If having written an error and you let the cursor settle, the error diagnostic floating window won't auto-appear due to LSP processing delay.
+
 -- [[ LSP Configuration ]]
 -- Brief aside: **What is LSP?**
 --
