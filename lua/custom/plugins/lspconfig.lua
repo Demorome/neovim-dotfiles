@@ -1,39 +1,33 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 
 vim.keymap.set('n', 'K', function()
-  vim.lsp.buf.hover({
+  vim.lsp.buf.hover {
     max_width = 80,
     max_height = 20,
     --border = 'rounded',  -- or 'single', 'double', 'solid', 'shadow', none'
-  })
-end, { desc = "Open LSP Info (Function docs, etc.)" })
+  }
+end, { desc = 'Open LSP Info (Function docs, etc.)' })
 
 -- See ":h diagnostic-defaults" for default diagnostic keybinds.
 -- Notably, <C-w>d shows diagnostics at cursor in a floating window.
-vim.diagnostic.config({
+vim.diagnostic.config {
   severity_sort = true,
   underline = true, -- call attention to diagnostics
-  virtual_text = false,
- -- virtual_text = { format = function(diagnostic)
---    return diagnosti
- -- end} -- disable default inline diagnostics
-})
-
+  virtual_text = false, -- disable inline diagnostics display (it usually makes for lines that are too long to read anyways)
+  -- Use icons instead of the default text ("E" for Errors, etc.).
+  signs = { text = { [vim.diagnostic.severity.ERROR] = 'E' } },
+}
 -- Auto-open diagnostics popup when hovering over a line with one.
 -- Only applies to Errors and Warnings; use <C-w>d for lesser diagnostics.
 -- Only opens it if in Normal mode, mostly to avoid annoying pop-ups while in Insert mode.
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+-- NOTE: Will still be temporarily open if you switch from Normal mode; just move or type something.
+vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   callback = function()
     -- Check for Normal mode
-    if (string.find(vim.api.nvim_get_mode().mode, 'n', 1)) then
-      local row, _ = unpack(vim.api.nvim_win_get_cursor( vim.api.nvim_get_current_win() ))
-      local counts = vim.diagnostic.count(0, { lnum = row, severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR } })
-      -- Check if there are any diagnostics on the current line with the given severity.
-      if (next(counts) ~= nil) then
-        vim.diagnostic.open_float(nil, { focus = false })
-      end
+    if string.find(vim.api.nvim_get_mode().mode, 'n', 1) then
+      vim.diagnostic.open_float(nil, { focus = false, severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR } })
     end
-  end
+  end,
 })
 
 -- [[ LSP Configuration ]]
@@ -66,7 +60,7 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 vim.pack.add { gh 'j-hui/fidget.nvim' }
 require('fidget').setup {
   -- TODO: Change text color to be darker, to blend in with background!
- -- vim.api.nvim_set_hl(0, 'FidgetTask', { fg = '#f0a4d0', bg = 'NONE' })
+  -- vim.api.nvim_set_hl(0, 'FidgetTask', { fg = '#f0a4d0', bg = 'NONE' })
 }
 
 --  This function gets run when an LSP attaches to a particular buffer.
