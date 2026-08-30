@@ -129,4 +129,6 @@ vim.keymap.set(
 -- Shortcut for searching your Neovim configuration files
 vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config', follow = true } end, { desc = '[S]earch [N]eovim files' })
 
+vim.keymap.set('n', '<leader>so', builtin.vim_options, { desc = '[S]earch Vim [O]ptions' })
+
 -- vim: ts=2 sts=2 sw=2 et
