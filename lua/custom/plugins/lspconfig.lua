@@ -115,6 +115,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
+    -- NOTE: These bindings already exist by default! These are only here to have a pretty description!
     -- Rename the variable under your cursor.
     --  Most Language Servers support renaming across files, etc.
     map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
