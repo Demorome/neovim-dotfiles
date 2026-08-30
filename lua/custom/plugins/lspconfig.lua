@@ -26,25 +26,39 @@ vim.diagnostic.config {
       [vim.diagnostic.severity.HINT] = diagnosticSymbols[4],
     },
   },
+  update_in_insert = true,
 }
+
+local get_num_floating_windows = function()
+  local windows = vim.api.nvim_tabpage_list_wins(0)
+  local num = 0
+  for _, window in ipairs(windows) do
+    if vim.api.nvim_win_get_config(window).relative ~= '' then num = num + 1 end
+  end
+  return num
+end
 
 -- Auto-open diagnostics popup when hovering over a line with one.
 -- Only applies to Errors and Warnings; use <C-w>d for lesser diagnostics.
 -- Only opens it if in Normal mode, mostly to avoid annoying pop-ups while in Insert mode.
+-- Only opens if there aren't any floating windows already, to avoid drawing over stuff like floating LSP info when trying to resolve a problem (let me look at the function definition!).
 Diagnostic_WindowID = nil
 vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   callback = function()
-    -- Check for Normal mode
+    -- Check for Normal mode, and if there is any floating window in the active tab.
     if string.find(vim.api.nvim_get_mode().mode, 'n', 1) then
-      _, Diagnostic_WindowID = vim.diagnostic.open_float(nil, {
-        focus = false,
-        severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
-      })
-    else
-      if Diagnostic_WindowID ~= nil then
-        if vim.api.nvim_win_is_valid(Diagnostic_WindowID) then vim.api.nvim_win_close(Diagnostic_WindowID, false) end
-        Diagnostic_WindowID = nil
+      local numFloatingWindows = get_num_floating_windows()
+      if numFloatingWindows <= 0 then
+        _, Diagnostic_WindowID = vim.diagnostic.open_float(nil, {
+          focus = false,
+          severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
+        })
       end
+      return
+    end
+    if Diagnostic_WindowID ~= nil then
+      if vim.api.nvim_win_is_valid(Diagnostic_WindowID) then vim.api.nvim_win_close(Diagnostic_WindowID, false) end
+      Diagnostic_WindowID = nil
     end
   end,
 })
