@@ -3,22 +3,22 @@ vim.loader.enable()
 
 vim.opt.wrap = false
 
--- Enable break indent
--- Only relevant if line wrap is enabled
-vim.o.breakindent = true
-
 vim.opt.tabstop = 4 -- tab width
 vim.opt.shiftwidth = 4 -- indent width
 vim.opt.softtabstop = 4 -- no idea?
 vim.opt.expandtab = true -- use spaces instead of tab
+
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 
 -- Folding options
-vim.opt.foldcolumn = "1"
-vim.opt.foldtext = ""
+-- Default keymaps: 'zR' opens all, 'zM' closes all, 'za' toggles for fold at cursor.
+vim.o.foldenable = true
+vim.opt.foldcolumn = '1'
+--vim.opt.fillchars:append { fold = ' ' }
+vim.opt.foldtext = ''
 vim.opt.foldlevel = 99
-vim.opt.foldlevelstart = 1
+vim.opt.foldlevelstart = 99
 vim.opt.foldnestmax = 4
 
 -- Set <space> as the leader key
@@ -64,7 +64,7 @@ vim.opt.incsearch = true --show matches as you type
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
-vim.opt.colorcolumn = "100" --show a column to discourage long lines
+vim.opt.colorcolumn = '100' --show a column to discourage long lines
 
 --vim.opt.cmdheight = 1
 --vim.opt.pumheight = 5
