@@ -106,6 +106,6 @@ vim.opt.sidescrolloff = 10
 vim.o.confirm = true
 
 -- Automatically change working dir to folder for the active file.
-vim.opt.autochdir = true
+--vim.opt.autochdir = true
 
 -- vim: ts=2 sts=2 sw=2 et
