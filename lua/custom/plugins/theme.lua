@@ -149,25 +149,25 @@ require('kanagawa').setup {
           -- changed = palette.autumnYellow,
         },
         term = {
-          -- TODO: Change? Idk if this even has an effect on my true-color terminal.
-          palette.near_black, -- our darkest black
-          palette.dragonRed, -- red
-          palette.green, -- green
-          palette.dragonYellow, -- yellow
-          palette.dragonBlue2, -- blue
-          palette.dragonPink, -- magenta
-          palette.dragonAqua, -- cyan
-          palette.oldWhite, -- white
-          palette.dragonGray, -- bright black
-          palette.waveRed, -- bright red
-          palette.dragonGreen, -- bright green
-          palette.carpYellow, -- bright yellow
-          palette.springBlue, -- bright blue
-          palette.springViolet1, -- bright magenta
-          palette.waveAqua2, -- bright cyan
-          palette.dragonWhite, -- bright white
-          palette.dragonOrange, -- extended color 1
-          palette.dragonOrange2, -- extended color 2
+          -- Mostly copied from Vault theme.
+          -- Slots 0-7: normal ANSI; slots 8-15: bright variants
+          -- No true blue or purple — blue/magenta slots use amber tones (GHOST-04)
+          palette.near, -- black → terminal bg
+          palette.warm_rust, -- red → warm rust-red
+          palette.green, -- green → Matrix green
+          palette.fnv_orange_dim, -- yellow → amber primary
+          palette.dim_amber, -- blue slot → dim amber (in-palette)
+          palette.dim_amber, -- magenta slot → dim amber (in-palette)
+          palette.muted_lime, -- cyan slot → lime string green
+          palette.amber_phosphor, -- white → amber fg
+          palette.warm_near_black_ui_bg, -- bright black → UI chrome
+          palette.warm_rust, -- bright red → warm rust-red
+          palette.full_green, -- bright green
+          palette.amber_phosphor, -- bright yellow → amber
+          palette.dim_amber, -- bright blue → dim amber (in-palette)
+          palette.dim_amber, -- bright magenta → dim amber (in-palette)
+          palette.green, -- bright cyan → Matrix green
+          '#e8d400', -- bright white → brighter amber
         },
       },
       lotus = {},
