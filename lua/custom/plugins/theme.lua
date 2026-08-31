@@ -95,7 +95,7 @@ require('kanagawa').setup {
             fg = palette.amber_phosphor, -- was: fujiWhite
             fg_sel = 'none', -- setting it to 'none' makes highlights pass-through (default).
             bg = palette.near_black,
-            bg_sel = palette.near_black_faint_green, -- was: waveBlue2. 'sel' for Selection (highlight).
+            bg_sel = palette.dark_green, -- was: waveBlue2. 'sel' for Selection (highlight).
             bg_thumb = palette.dim_green, -- was: waveBlue2. The selection bar's thumb-dragger.
             bg_sbar = palette.near_black_faint_green, -- was: waveBlue1. The selection bar's color.
           },
