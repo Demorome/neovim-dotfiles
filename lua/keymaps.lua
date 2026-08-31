@@ -3,15 +3,16 @@
 
 -- Quick-saving keybind.
 -- Calling update has the advantage of not doing anything if the file wasn't changed.
-vim.keymap.set('n', '<leader>w', '<cmd>:echo "Saved file (no changes)"<CR><cmd>:update<CR>', { desc = "Save the file"})
+vim.keymap.set('n', '<leader>w', '<cmd>:echo "Saved file (no changes)"<CR><cmd>:update<CR>', { desc = 'Save the file' })
 
 --  Map CTRL+Z to undo.
 vim.keymap.set('n', '<C-z>', 'u')
 
 -- Remap Enter and Shift-Enter to create newlines in Normal mode.
 -- Credits to: https://www.reddit.com/r/neovim/comments/10kah18/comment/j5rueyw/
-vim.keymap.set('n', '<CR>', '@="m`o<C-V><Esc>``"<CR>')
-vim.keymap.set('n', '<S-CR>', '@="m`O<C-V><Esc>``"<CR>')
+-- NOTE: I removed these, since they break jumping to quickfix list files, and I can use 'o' anyways.
+--vim.keymap.set('n', '<CR>', '@="m`o<C-V><Esc>``"<CR>')
+--vim.keymap.set('n', '<S-CR>', '@="m`O<C-V><Esc>``"<CR>')
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
