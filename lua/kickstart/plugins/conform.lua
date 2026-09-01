@@ -8,7 +8,7 @@ require('conform').setup {
     -- You can specify filetypes to autoformat on save here:
     local enabled_filetypes = {
       lua = true,
-      c_sharp = true
+      c_sharp = true,
       -- python = true,
     }
     if enabled_filetypes[vim.bo[bufnr].filetype] then
@@ -30,7 +30,5 @@ require('conform').setup {
     -- javascript = { "prettierd", "prettier", stop_after_first = true },
   },
 }
-
-vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })
 
 -- vim: ts=2 sts=2 sw=2 et
