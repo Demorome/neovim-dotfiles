@@ -4,7 +4,7 @@
 -- Disable copying for simple deletions.
 -- Credits to this blog post for this trick: https://vale.rocks/posts/neovim
 vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
-vim.keymal.set({ 'n', 'v' }, 'X', '"_X')
+vim.keymap.set({ 'n', 'v' }, 'X', '"_X')
 
 -- Quick-saving keybind.
 -- Calling update has the advantage of not doing anything if the file wasn't changed.
