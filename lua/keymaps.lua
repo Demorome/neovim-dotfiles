@@ -17,8 +17,13 @@ vim.keymap.set('n', '<C-z>', 'u')
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- I think the location list is more intended for manually inserted / grep'd lines?
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open location [Q]uickfix list' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open [Q]uickfix list' })
+
+-- TIP: use `:colder` and `:cnewer` to manage multiple error list
+-- WARN: This replaces the current error quick-fix list with the latest diagnostics (i.e. replaces compilation failure errors).
+-- This should rarely matter, unless you're building in a different configuration than the diagnostics is parsing for.
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open diagnostics [Q]uickfix list' })
 -- "h: cope" (unironically)
 vim.keymap.set('n', '<leader>e', '<cmd>cope<CR>/error', { desc = 'Open [E]rrors quickfix list' })
 
