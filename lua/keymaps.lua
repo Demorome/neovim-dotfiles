@@ -1,6 +1,9 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Add alternate Undo, since default U is not very helpful anyways.
+vim.keymap.set('n', 'U', '<cmd>redo<CR>', { desc = 'Redo' })
+
 -- Useful plugin to show you pending keybinds.
 vim.pack.add { 'https://github.com/nvim-mini/mini.nvim' }
 local miniclue = require 'mini.clue'
