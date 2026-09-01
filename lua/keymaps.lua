@@ -4,11 +4,87 @@
 -- Useful plugin to show you pending keybinds.
 vim.pack.add { 'https://github.com/nvim-mini/mini.nvim' }
 local miniclue = require 'mini.clue'
+
+-- TODO: There will hopefully be a time where this isn't necessary.
+-- See this discussion: https://github.com/nvim-mini/mini.nvim/discussions/2061
+-- Credits to @DanWlker
+local function mini_ai_clue()
+  local objects = {
+    { ' ', desc = 'whitespace' },
+    { '"', desc = '" string' },
+    { "'", desc = "' string" },
+    { '(', desc = '() block' },
+    { ')', desc = '() block with ws' },
+    { '<', desc = '<> block' },
+    { '>', desc = '<> block with ws' },
+    { '?', desc = 'user prompt' },
+    { 'U', desc = 'use/call without dot' },
+    { '[', desc = '[] block' },
+    { ']', desc = '[] block with ws' },
+    { '_', desc = 'underscore' },
+    { '`', desc = '` string' },
+    { 'a', desc = 'argument' },
+    { 'b', desc = ')]} block' },
+    { 'c', desc = 'class' },
+    { 'd', desc = 'digit(s)' },
+    { 'e', desc = 'CamelCase / snake_case' },
+    { 'f', desc = 'function' },
+    { 'g', desc = 'entire file' },
+    { 'o', desc = 'block, conditional, loop' },
+    { 'q', desc = 'quote `"\'' },
+    { 't', desc = 'tag' },
+    { 'l', desc = 'line' },
+    { 'u', desc = 'use/call' },
+    { '{', desc = '{} block' },
+    { '}', desc = '{} with ws' },
+  }
+
+  local modes = { 'x', 'o' }
+  local ret = {}
+  ---@type table<string, string>
+  local mappings = {
+    around = 'a',
+    inside = 'i',
+    -- around_next = 'an',
+    -- inside_next = 'in',
+    -- around_last = 'al',
+    -- inside_last = 'il',
+  }
+
+  -- print(vim.inspect(mappings))
+
+  for _, prefix in pairs(mappings) do
+    if prefix == '' then goto continue end
+    for _, mode in ipairs(modes) do
+      for _, obj in ipairs(objects) do
+        local desc = obj.desc
+        if prefix:sub(1, 1) == 'i' then desc = desc:gsub(' with ws', '') end
+        ret[#ret + 1] = { mode = mode, keys = prefix .. obj[1], desc = desc }
+      end
+    end
+    ::continue::
+  end
+
+  return ret
+end
+
 miniclue.setup {
   window = {
-    delay = 0,
+    delay = 0, -- ms before showing clues
+    config = {
+      width = 'auto',
+      -- Helix-style: bottom-right of screen
+      anchor = 'SE',
+      row = 'auto',
+      col = 'auto',
+    },
   },
   triggers = {
+    { mode = 'x', keys = 'a' },
+    { mode = 'o', keys = 'a' },
+    { mode = 'x', keys = 'i' },
+    { mode = 'o', keys = 'i' },
+
     -- Leader triggers
     { mode = { 'n', 'x' }, keys = '<Leader>' },
 
@@ -38,6 +114,8 @@ miniclue.setup {
   },
 
   clues = {
+    mini_ai_clue(),
+
     -- Enhance this by adding descriptions for <Leader> mapping groups.
     { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
     { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
@@ -76,7 +154,6 @@ vim.keymap.set('n', '<leader>tt', '<Cmd>vertical term<CR>', { desc = 'Terminal (
 -- I think the location list is more intended for manually inserted / grep'd lines?
 vim.keymap.set('n', '<leader>eQ', vim.diagnostic.setloclist, { desc = 'Location [Q]uickfix list' })
 
--- TIP: use `:colder` and `:cnewer` to manage multiple error list
 -- WARN: This replaces the current error quick-fix list with the latest diagnostics (i.e. replaces compilation failure errors).
 -- This should rarely matter, unless you're building in a different configuration than the diagnostics is parsing for.
 vim.keymap.set('n', '<leader>eq', vim.diagnostic.setqflist, { desc = 'Diagnostics [Q]uickfix list' })
@@ -86,6 +163,7 @@ local explore_quickfix = function()
   vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and 'cclose' or 'copen')
 end
 
+-- TIP: use `:colder` and `:cnewer` to manage multiple error lists.
 vim.keymap.set('n', '<leader>ee', explore_quickfix, { desc = '[E]rrors quickfix list' })
 vim.keymap.set('n', '<leader>ed', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Directory' })
 vim.keymap.set('n', '<leader>ef', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', { desc = 'File directory' })
