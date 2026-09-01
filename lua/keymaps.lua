@@ -17,8 +17,10 @@ vim.keymap.set('n', '<C-z>', 'u')
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
-vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open local [Q]uickfix list' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open global [Q]uickfix list' })
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open location [Q]uickfix list' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open [Q]uickfix list' })
+-- "h: cope" (unironically)
+vim.keymap.set('n', '<leader>e', '<cmd>cope<CR>', { desc = 'Open [E]rrors quickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
