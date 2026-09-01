@@ -8,41 +8,11 @@ vim.keymap.set('n', '<leader>w', '<cmd>:echo "Saved file (no changes)"<CR><cmd>:
 --  Map CTRL+Z to undo.
 vim.keymap.set('n', '<C-z>', 'u')
 
--- Remap Enter and Shift-Enter to create newlines in Normal mode.
--- Credits to: https://www.reddit.com/r/neovim/comments/10kah18/comment/j5rueyw/
--- NOTE: I removed these, since they break jumping to quickfix list files, and I can use 'o' anyways.
---vim.keymap.set('n', '<CR>', '@="m`o<C-V><Esc>``"<CR>')
---vim.keymap.set('n', '<S-CR>', '@="m`O<C-V><Esc>``"<CR>')
-
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic Config & Keymaps
---  See `:help vim.diagnostic.Opts`
-vim.diagnostic.config {
-  update_in_insert = false,
-  severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = { min = vim.diagnostic.severity.WARN } },
-
-  -- Can switch between these as you prefer
-  virtual_text = true, -- Text shows up at the end of the line
-  virtual_lines = false, -- Text shows up underneath the line, with virtual lines
-
-  -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-  jump = {
-    on_jump = function(_, bufnr)
-      vim.diagnostic.open_float {
-        bufnr = bufnr,
-        scope = 'cursor',
-        focus = false,
-      }
-    end,
-  },
-}
-
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+--vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open file diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -85,9 +55,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
--- vim: ts=2 sts=2 sw=2 et
-
 vim.keymap.set('', '<leader>y', '"+y', { desc = 'Yank to clipboard' }) -- E.g: <leader>yy will yank current line to os clipboard
 vim.keymap.set('', '<leader>Y', '"+y$', { desc = 'Yank until EOL to clipboard' })
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste after cursor from clipboard' })
 vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor from clipboard' })
+
+-- vim: ts=2 sts=2 sw=2 et
