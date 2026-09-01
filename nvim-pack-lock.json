@@ -19,7 +19,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "easy-dotnet.nvim": {
-      "rev": "7765221c078267bad975fdca307776ecc01c69cc",
+      "rev": "1583b4add7e23eed2e04317275168b13f273dff7",
       "src": "https://github.com/GustavEikaas/easy-dotnet.nvim"
     },
     "fidget.nvim": {
@@ -87,7 +87,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "16286347bdba1333c7d124d9de9fe6630731b2b2",
+      "rev": "bbe6b383a1e85d3a84b54a43f7d9d83567c150cb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -95,13 +95,17 @@
       "src": "https://github.com/nvim-neotest/nvim-nio"
     },
     "nvim-treesitter": {
-      "rev": "19071296d3d643b48615ee574a20e8a03ac40872",
+      "rev": "427e9222363d07c32d6db6169e4049c28d58d141",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-treesitter-context": {
       "rev": "f3061339b8eaf9fda873600bc425b8d2d8502533",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "898ee307df58f854d11cd7edd06472574d48014e",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "oil.nvim": {
       "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
@@ -116,7 +120,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "project.nvim": {
-      "rev": "02094c1acdd1f049410a0d6bc05c469fc5eb6c4f",
+      "rev": "278ac548a5e1d5e76251bf03e1f75a11b452f8ad",
       "src": "https://github.com/DrKJeff16/project.nvim"
     },
     "rainbow-delimiters.nvim": {

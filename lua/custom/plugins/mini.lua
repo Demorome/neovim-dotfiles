@@ -17,14 +17,81 @@ end
 --  - va)  - [V]isually select [A]round [)]paren
 --  - yiiq - [Y]ank [I]nside [I]+1 [Q]uote
 --  - ci'  - [C]hange [I]nside [']quote
+--
+--  See `:h MiniAi-builtin-textobjects` for more, like going around a function call.
+local gen_spec = require('mini.ai').gen_spec
 require('mini.ai').setup {
   -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
   mappings = {
     around_next = 'aa',
     inside_next = 'ii',
   },
+  custom_textobjects = {
+      -- Tweak argument to be recognized only inside `()` between `;`
+      --a = gen_spec.argument({ brackets = { '%b()' }, separator = ';' }),
+
+    -- Tweak function call to not detect dot in function name
+    f = gen_spec.function_call({ name_pattern = '[%w_]' }),
+
+    -- Function definition (needs treesitter queries with these captures)
+    F = gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' },
+      { use_nvim_treesitter = true}
+    ),
+
+      -- Make `|` select both edges in non-balanced way
+     -- ['|'] = gen_spec.pair('|', '|', { type = 'non-balanced' }),
+  },
   n_lines = 500,
 }
+
+-- More advanced textobjects, based on treesitter queries.
+vim.pack.add { 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects' }
+require("nvim-treesitter-textobjects").setup {
+  select = {
+    -- Automatically jump forward to textobj, similar to targets.vim
+    lookahead = true,
+    -- You can choose the select mode (default is charwise 'v')
+    --
+    -- Can also be a function which gets passed a table with the keys
+    -- * query_string: eg '@function.inner'
+    -- * method: eg 'v' or 'o'
+    -- and should return the mode ('v', 'V', or '<c-v>') or a table
+    -- mapping query_strings to modes.
+    selection_modes = {
+      ['@parameter.outer'] = 'v', -- charwise
+      ['@function.outer'] = 'V', -- linewise
+      -- ['@class.outer'] = '<c-v>', -- blockwise
+    },
+    -- If you set this to `true` (default is `false`) then any textobject is
+    -- extended to include preceding or succeeding whitespace. Succeeding
+    -- whitespace has priority in order to act similarly to eg the built-in
+    -- `ap`.
+    --
+    -- Can also be a function which gets passed a table with the keys
+    -- * query_string: eg '@function.inner'
+    -- * selection_mode: eg 'v'
+    -- and should return true of false
+    include_surrounding_whitespace = false,
+  },
+}
+
+-- You can use the capture groups defined in `textobjects.scm`
+vim.keymap.set({ "x", "o" }, "af", function()
+  require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
+end, { desc = "Around [F]unction"})
+vim.keymap.set({ "x", "o" }, "if", function()
+  require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
+end, { desc = "Inside [F]unction"})
+vim.keymap.set({ "x", "o" }, "ac", function()
+  require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
+end, { desc = "Around [C]lass"})
+vim.keymap.set({ "x", "o" }, "ic", function()
+  require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
+end, { desc = "Inside [C]lass"})
+-- You can also use captures from other query groups like `locals.scm`
+vim.keymap.set({ "x", "o" }, "as", function()
+  require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
+end, { desc = "Around [S]cope"})
 
 -- Add/delete/replace surroundings (brackets, quotes, etc.)
 --
@@ -40,6 +107,13 @@ diagnosticSigns[3] = '%#DiagnosticInfo#' .. diagnosticSigns[3]
 diagnosticSigns[4] = '%#DiagnosticHint#' .. diagnosticSigns[4]
 
 local statusline = require 'mini.statusline'
+if vim.g.colors_name == "kanagawa" then
+  -- Override highlight groups to better fit this theme.
+  -- NOTE: That theme was overriden to house my Fallout theme.
+	vim.api.nvim_set_hl(0, "MiniStatuslineFileDirectory", { fg = "#5a5200", bg = "#2a2800"})
+  vim.api.nvim_set_hl(0, "MiniStatuslineFilename", { fg = "#c8b400", bg = "#2a2800", bold = true })
+	vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = "#5a5200", bg = "#2a2800"})
+end
 statusline.setup {
   use_icons = vim.g.have_nerd_font,
   content = {
@@ -81,10 +155,10 @@ statusline.setup {
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics } },
         '%<', -- Mark general truncate point
         -- Show file's directory in grayed-out text, then filename in brighter text.
-        { hl = 'MiniStatuslineFilename', strings = { getFileDirectory() .. '%#MiniStatuslineFileinfo#' ..  vim.fn.expand '%:t' } },
+        { hl = 'MiniStatuslineFileDirectory', strings = { getFileDirectory() .. '%#@MiniStatuslineFilename#' ..  vim.fn.expand '%:t' } },
         '%=', -- End left alignment
         -- Show file info in grayed-out text.
-        { hl = 'MiniStatuslineFilename', strings = { fileInfo() } },
+        { hl = 'MiniStatuslineFileinfo', strings = { fileInfo() } },
         { hl = mode_hl, strings = { search, location } },
       }
     end,
