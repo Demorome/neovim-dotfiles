@@ -1,6 +1,45 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+local function gh(repo) return 'https://github.com/' .. repo end
+
+-- Useful plugin to show you pending keybinds.
+vim.pack.add { gh 'folke/which-key.nvim' }
+require('which-key').setup {
+  -- Delay between pressing a key and opening which-key (milliseconds)
+  delay = 0,
+  icons = { mappings = vim.g.have_nerd_font },
+  -- Document existing key chains
+  spec = {
+    { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
+    --{ '<leader>t', group = '[T]oggle' },
+    { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
+    { 'gr', group = 'LSP Actions', mode = { 'n' } },
+  },
+}
+
+-- [[Keymaps from MiniMax]]: https://github.com/nvim-mini/MiniMax/blob/main/configs/nvim-0.13/plugin/20_keymaps.lua
+vim.keymap.set('n', '[p', '<Cmd>exe "iput! " . v:register<CR>', { desc = 'Paste Above' })
+vim.keymap.set('n', ']p', '<Cmd>exe "iput "  . v:register<CR>', { desc = 'Paste Below' })
+
+-- t is for 'Terminal'
+-- vim.keymap.set('<leader>tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
+-- vim.keymap.set('<leader>tt', '<Cmd>vertical term<CR>',   'Terminal (vertical)')
+
+-- e is for 'Explore' and 'Edit'.
+
+-- I think the location list is more intended for manually inserted / grep'd lines?
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open location [Q]uickfix list' })
+
+-- TIP: use `:colder` and `:cnewer` to manage multiple error list
+-- WARN: This replaces the current error quick-fix list with the latest diagnostics (i.e. replaces compilation failure errors).
+-- This should rarely matter, unless you're building in a different configuration than the diagnostics is parsing for.
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open diagnostics [Q]uickfix list' })
+-- "h: cope" (unironically)
+vim.keymap.set('n', '<leader>e', '<cmd>cope<CR>/error', { desc = 'Open [E]rrors quickfix list' })
+
+-- [[Resume regular keymaps]]
+
 -- Disable copying for simple deletions.
 -- Credits to this blog post for this trick: https://vale.rocks/posts/neovim
 vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
@@ -16,16 +55,6 @@ vim.keymap.set('n', '<C-z>', 'u')
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- I think the location list is more intended for manually inserted / grep'd lines?
-vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = 'Open location [Q]uickfix list' })
-
--- TIP: use `:colder` and `:cnewer` to manage multiple error list
--- WARN: This replaces the current error quick-fix list with the latest diagnostics (i.e. replaces compilation failure errors).
--- This should rarely matter, unless you're building in a different configuration than the diagnostics is parsing for.
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Open diagnostics [Q]uickfix list' })
--- "h: cope" (unironically)
-vim.keymap.set('n', '<leader>e', '<cmd>cope<CR>/error', { desc = 'Open [E]rrors quickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which

@@ -2,7 +2,6 @@
 
 require 'kickstart.plugins.guess-indent'
 require 'kickstart.plugins.gitsigns'
-require 'kickstart.plugins.which-key' -- show hints about what key combinations are possible
 require 'custom.plugins.theme' -- set visual theme.
 require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
 
