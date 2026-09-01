@@ -18,7 +18,7 @@ require 'kickstart.plugins.indent_line'
 require 'kickstart.plugins.lint'
 require 'kickstart.plugins.autopairs'
 
-require 'custom.plugins.directory-viewer'
+require 'custom.plugins.fuzzy-viewer'
 require 'kickstart.plugins.gitsigns' -- also adds gitsigns recommended keymaps
 
 require 'custom.plugins.easy-dotnet-nvim'
