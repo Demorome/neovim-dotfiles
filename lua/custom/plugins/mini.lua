@@ -149,9 +149,9 @@ require('mini.statusline').setup {
       local git_diff = function()
         if MiniStatusline.is_truncated(75) then return '' end
 
-        local added
-        local changed
-        local removed
+        local added = 0
+        local changed = 0
+        local removed = 0
 
         --- - `vim.b.minidiff_summary` is a table with the following fields:
         ---     - `source_name` - name of the active source. This is the only present field
@@ -175,12 +175,12 @@ require('mini.statusline').setup {
           return ''
         end
 
-        local diff_str = ""
+        local diff_str = ''
         	if added > 0 then
-        		diff_str = diff_str .. "%$StatusDiffAdd$+" .. added 
+        		diff_str = diff_str .. "%$StatusDiffAdd$+" .. added
         	end
         	if changed > 0 then
-        		diff_str = diff_str ..(string.len(diff_str) > 0 and ' ' or '') .. "%$StatusDiffChange$~" .. changed
+        		diff_str = diff_str .. (string.len(diff_str) > 0 and ' ' or '') .. "%$StatusDiffChange$~" .. changed
         	end
         	if removed > 0 then
         		diff_str = diff_str .. (string.len(diff_str) > 0 and ' ' or '') .. "%$StatusDiffDelete$-" .. removed
@@ -221,7 +221,7 @@ require('mini.statusline').setup {
 
       local fileInfo = function()
         -- Return empty string if truncated or buffer is not normal.
-        if MiniStatusline.is_truncated(120) or vim.bo.buftype ~= '' then return end
+        if MiniStatusline.is_truncated(120) or vim.bo.buftype ~= '' then return '' end
         local encoding = vim.bo.fileencoding or vim.bo.encoding
         local format = vim.bo.fileformat
         return string.format('%s[%s]', encoding, format)
