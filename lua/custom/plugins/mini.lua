@@ -113,11 +113,14 @@ vim.keymap.set(
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require('mini.surround').setup()
 
+-- Note the extra space at the end of each string: it allows the symbol to 'grow'.
 local diagnosticSigns = { ' ', ' ', ' ', '󰴲 ' }
-diagnosticSigns[1] = '%#DiagnosticError#' .. diagnosticSigns[1]
-diagnosticSigns[2] = '%#DiagnosticWarning#' .. diagnosticSigns[2]
-diagnosticSigns[3] = '%#DiagnosticInfo#' .. diagnosticSigns[3]
-diagnosticSigns[4] = '%#DiagnosticHint#' .. diagnosticSigns[4]
+-- Use $ instead of # to inherit the background of the previous highlight groups.
+-- Was introduced with https://github.com/neovim/neovim/pull/37153
+diagnosticSigns[1] = '%$DiagnosticError$' .. diagnosticSigns[1]
+diagnosticSigns[2] = '%$DiagnosticWarning$' .. diagnosticSigns[2]
+diagnosticSigns[3] = '%$DiagnosticInfo$' .. diagnosticSigns[3]
+diagnosticSigns[4] = '%$DiagnosticHint$' .. diagnosticSigns[4]
 
 local statusline = require 'mini.statusline'
 if vim.g.colors_name == 'kanagawa' then
@@ -175,6 +178,8 @@ statusline.setup {
       local filepathWithHighlights = function()
             -- Aside: did a quick research and Lua `..` string concat is probably faster than string.format, neat.
           local result = '%#MiniStatuslineFileDirectory#' .. getFileDirectory() .. '%#MiniStatuslineFilename#' .. getFileName()
+
+          -- TODO: Show CWD separately?
           return result
       end
 
@@ -188,7 +193,7 @@ statusline.setup {
         '%<', -- Mark general truncate point
         -- Show file's directory in grayed-out text, then filename in brighter text.
         {
-          hl = nil,
+          hl = nil, -- we're formatting our string with the highlight info ourselves.
           strings = { filepathWithHighlights() },
         },
         '%=', -- End left alignment
