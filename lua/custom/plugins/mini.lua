@@ -27,26 +27,24 @@ require('mini.ai').setup {
     inside_next = 'ii',
   },
   custom_textobjects = {
-      -- Tweak argument to be recognized only inside `()` between `;`
-      --a = gen_spec.argument({ brackets = { '%b()' }, separator = ';' }),
+    -- Tweak argument to be recognized only inside `()` between `;`
+    --a = gen_spec.argument({ brackets = { '%b()' }, separator = ';' }),
 
     -- Tweak function call to not detect dot in function name
-    f = gen_spec.function_call({ name_pattern = '[%w_]' }),
+    f = gen_spec.function_call { name_pattern = '[%w_]' },
 
     -- Function definition (needs treesitter queries with these captures)
-    F = gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' },
-      { use_nvim_treesitter = true}
-    ),
+    F = gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }, { use_nvim_treesitter = true }),
 
-      -- Make `|` select both edges in non-balanced way
-     -- ['|'] = gen_spec.pair('|', '|', { type = 'non-balanced' }),
+    -- Make `|` select both edges in non-balanced way
+    -- ['|'] = gen_spec.pair('|', '|', { type = 'non-balanced' }),
   },
   n_lines = 500,
 }
 
 -- More advanced textobjects, based on treesitter queries.
 vim.pack.add { 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects' }
-require("nvim-treesitter-textobjects").setup {
+require('nvim-treesitter-textobjects').setup {
   select = {
     -- Automatically jump forward to textobj, similar to targets.vim
     lookahead = true,
@@ -76,22 +74,37 @@ require("nvim-treesitter-textobjects").setup {
 }
 
 -- You can use the capture groups defined in `textobjects.scm`
-vim.keymap.set({ "x", "o" }, "af", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
-end, { desc = "Around [F]unction"})
-vim.keymap.set({ "x", "o" }, "if", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
-end, { desc = "Inside [F]unction"})
-vim.keymap.set({ "x", "o" }, "ac", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
-end, { desc = "Around [C]lass"})
-vim.keymap.set({ "x", "o" }, "ic", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
-end, { desc = "Inside [C]lass"})
+vim.keymap.set(
+  { 'x', 'o' },
+  'af',
+  function() require('nvim-treesitter-textobjects.select').select_textobject('@function.outer', 'textobjects') end,
+  { desc = 'Around [F]unction' }
+)
+vim.keymap.set(
+  { 'x', 'o' },
+  'if',
+  function() require('nvim-treesitter-textobjects.select').select_textobject('@function.inner', 'textobjects') end,
+  { desc = 'Inside [F]unction' }
+)
+vim.keymap.set(
+  { 'x', 'o' },
+  'ac',
+  function() require('nvim-treesitter-textobjects.select').select_textobject('@class.outer', 'textobjects') end,
+  { desc = 'Around [C]lass' }
+)
+vim.keymap.set(
+  { 'x', 'o' },
+  'ic',
+  function() require('nvim-treesitter-textobjects.select').select_textobject('@class.inner', 'textobjects') end,
+  { desc = 'Inside [C]lass' }
+)
 -- You can also use captures from other query groups like `locals.scm`
-vim.keymap.set({ "x", "o" }, "as", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
-end, { desc = "Around [S]cope"})
+vim.keymap.set(
+  { 'x', 'o' },
+  'as',
+  function() require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals') end,
+  { desc = 'Around [S]cope' }
+)
 
 -- Add/delete/replace surroundings (brackets, quotes, etc.)
 --
@@ -107,47 +120,66 @@ diagnosticSigns[3] = '%#DiagnosticInfo#' .. diagnosticSigns[3]
 diagnosticSigns[4] = '%#DiagnosticHint#' .. diagnosticSigns[4]
 
 local statusline = require 'mini.statusline'
-if vim.g.colors_name == "kanagawa" then
+if vim.g.colors_name == 'kanagawa' then
   -- Override highlight groups to better fit this theme.
   -- NOTE: That theme was overriden to house my Fallout theme.
-	vim.api.nvim_set_hl(0, "MiniStatuslineFileDirectory", { fg = "#5a5200", bg = "#2a2800"})
-  vim.api.nvim_set_hl(0, "MiniStatuslineFilename", { fg = "#c8b400", bg = "#2a2800", bold = true })
-	vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = "#5a5200", bg = "#2a2800"})
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFileDirectory', { fg = '#5a5200', bg = '#2a2800' })
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = '#c8b400', bg = '#2a2800', bold = true })
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { fg = '#5a5200', bg = '#2a2800' })
 end
 statusline.setup {
   use_icons = vim.g.have_nerd_font,
   content = {
     --content for active window
+    -- See `:h statusline` for details on what all these weird `%# .. #' and %f/%F formatting symbols mean.
     active = function()
       local mode, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
       local git = MiniStatusline.section_git { trunc_width = 40 }
       local diff = MiniStatusline.section_diff { trunc_width = 75 }
       local diagnostics = MiniStatusline.section_diagnostics {
         trunc_width = 75,
-          signs = { ERROR = diagnosticSigns[1], WARN = diagnosticSigns[2], INFO = diagnosticSigns[3], HINT = diagnosticSigns[4] },
+        signs = { ERROR = diagnosticSigns[1], WARN = diagnosticSigns[2], INFO = diagnosticSigns[3], HINT = diagnosticSigns[4] },
       }
       -- local lsp           = MiniStatusline.section_lsp({ trunc_width = 75 })
-      --local filename = MiniStatusline.section_filename { trunc_width = 140 }
       local getFileDirectory = function()
-        if !MiniStatusline.is_truncated(120) then
+        -- In terminal, don't show a directory.
+        if vim.bo.buftype == 'terminal' then
+          return ''
+        elseif !MiniStatusline.is_truncated(120) then
           -- Show full directory, with home dir shortened to '~/'
           return vim.fn.expand '%:p:~:h' .. '/'
         else
-          -- Show relative directory.
+          -- Use fullpath if not truncated
           return vim.fn.expand '%:h' .. '/'
         end
       end
-      -- local fileinfo = MiniStatusline.section_fileinfo { trunc_width = 120 }
-      local fileInfo = function()
-          -- Return empty string if truncated or buffer is not normal.
-          if MiniStatusline.is_truncated(120) or vim.bo.buftype ~= '' then
-        return
+
+      local getFileName = function()
+        -- In terminal, always use plain name.
+        if vim.bo.buftype == 'terminal' then
+          return '%t'
+        else
+          -- '%t' for filename, '%m' for Modified flag, '%r' for Readonly flag (shows [RO] if readonly)
+          return '%t%m%r'
         end
-          local encoding = vim.bo.fileencoding or vim.bo.encoding
-          local format = vim.bo.fileformat
-          return string.format("%s[%s]", encoding, format)
       end
-      local location = MiniStatusline.section_location { trunc_width = 75 }
+
+      local fileInfo = function()
+        -- Return empty string if truncated or buffer is not normal.
+        if MiniStatusline.is_truncated(120) or vim.bo.buftype ~= '' then return end
+        local encoding = vim.bo.fileencoding or vim.bo.encoding
+        local format = vim.bo.fileformat
+        return string.format('%s[%s]', encoding, format)
+      end
+
+      local filepathWithHighlights = function()
+            -- Aside: did a quick research and Lua `..` string concat is probably faster than string.format, neat.
+          local result = '%#MiniStatuslineFileDirectory#' .. getFileDirectory() .. '%#MiniStatuslineFilename#' .. getFileName()
+          return result
+      end
+
+      -- Set cursor location to LINE:COLUMN
+      local location = function() return '%2l:%-2v' end
       local search = MiniStatusline.section_searchcount { trunc_width = 75 }
 
       return MiniStatusline.combine_groups {
@@ -155,21 +187,18 @@ statusline.setup {
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics } },
         '%<', -- Mark general truncate point
         -- Show file's directory in grayed-out text, then filename in brighter text.
-        { hl = 'MiniStatuslineFileDirectory', strings = { getFileDirectory() .. '%#@MiniStatuslineFilename#' ..  vim.fn.expand '%:t' } },
+        {
+          hl = nil,
+          strings = { filepathWithHighlights() },
+        },
         '%=', -- End left alignment
         -- Show file info in grayed-out text.
         { hl = 'MiniStatuslineFileinfo', strings = { fileInfo() } },
-        { hl = mode_hl, strings = { search, location } },
+        { hl = mode_hl, strings = { search, location() } },
       }
     end,
   },
 }
-
--- You can configure sections in the statusline by overriding their
--- default behavior. For example, here we set the section for
--- cursor location to LINE:COLUMN
----@diagnostic disable-next-line: duplicate-set-field
-statusline.section_location = function() return '%2l:%-2v' end
 
 -- ... and there is more!
 --  Check out: https://github.com/nvim-mini/mini.nvim
