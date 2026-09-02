@@ -5,6 +5,7 @@ vim.api.nvim_create_autocmd({ 'TermEnter' }, {
 })
 
 -- Auto-save file when running project commands.
+-- TODO: Save ALL files in open buffers!
 local projectCommands = { 'Dotnet', 'make', 'Git' }
 vim.api.nvim_create_autocmd('CmdlineLeave', {
   callback = function()

@@ -4,3 +4,6 @@
 --
 -- NOTE: mini.files does not support SSH, unlike Oil!
 require('mini.files').setup()
+
+-- Type g? for more information about other available mappings and bookmarks.
+-- `:h MiniFiles-navigation` for deeper overview.
