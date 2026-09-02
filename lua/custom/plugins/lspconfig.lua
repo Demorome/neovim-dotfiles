@@ -21,11 +21,22 @@ vim.diagnostic.config {
   update_in_insert = true,
 }
 
-local get_num_floating_windows = function()
+local get_num_floating_windows_near_cursor = function()
   local windows = vim.api.nvim_tabpage_list_wins(0)
+  local cursorPos = vim.api.nvim_win_get_cursor(0)
+
   local num = 0
   for _, window in ipairs(windows) do
-    if vim.api.nvim_win_get_config(window).relative ~= '' then num = num + 1 end
+    -- Check if window is floating.
+    if vim.api.nvim_win_get_config(window).relative ~= '' then
+      local floatPos = vim.api.nvim_win_get_position(window)
+      -- Ignore floating context windows from Treesitter-context.
+      if floatPos[1] ~= 0 and floatPos[2] ~= 0 then
+        -- TODO: Further filter down!
+        -- print(floatPos[1], floatPos[2], cursorPos[1], cursorPos[2])
+        num = num + 1
+      end
+    end
   end
   return num
 end
@@ -39,7 +50,7 @@ vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   callback = function()
     -- Check for Normal mode, and if there is any floating window in the active tab.
     if string.find(vim.api.nvim_get_mode().mode, 'n', 1) then
-      local numFloatingWindows = get_num_floating_windows()
+      local numFloatingWindows = get_num_floating_windows_near_cursor()
       if numFloatingWindows <= 0 then
         _, Diagnostic_WindowID = vim.diagnostic.open_float(nil, {
           focus = false,
