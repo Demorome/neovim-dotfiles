@@ -122,23 +122,75 @@ diagnosticSigns[2] = '%$DiagnosticWarning$' .. diagnosticSigns[2]
 diagnosticSigns[3] = '%$DiagnosticInfo$' .. diagnosticSigns[3]
 diagnosticSigns[4] = '%$DiagnosticHint$' .. diagnosticSigns[4]
 
-local statusline = require 'mini.statusline'
 if vim.g.colors_name == 'kanagawa' then
   -- Override highlight groups to better fit this theme.
   -- NOTE: That theme was overriden to house my Fallout theme.
-  vim.api.nvim_set_hl(0, 'MiniStatuslineFileDirectory', { fg = '#5a5200', bg = '#2a2800' })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = '#c8b400', bg = '#2a2800', bold = true })
-  vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { fg = '#5a5200', bg = '#2a2800' })
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFileDirectory', { fg = '#5a5200' })
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = '#c8b400', bold = true })
+  vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { fg = '#5a5200' })
 end
-statusline.setup {
+
+-- Define generic git diff status groups, to avoid hard-coding a reliance on a plugin somewhere obscure.
+vim.api.nvim_set_hl(0, "StatusDiffAdd", { link = 'DiagnosticInfo' })
+vim.api.nvim_set_hl(0, "StatusDiffChange", { link = 'DiagnosticWarn' })
+vim.api.nvim_set_hl(0, "StatusDiffDelete", { link = 'DiagnosticError' })
+
+require('mini.statusline').setup {
   use_icons = vim.g.have_nerd_font,
   content = {
     --content for active window
     -- See `:h statusline` for details on what all these weird `%# .. #' and %f/%F formatting symbols mean.
     active = function()
+      local MiniStatusline = require('mini.statusline')
+
       local mode, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
-      local git = MiniStatusline.section_git { trunc_width = 40 }
-      local diff = MiniStatusline.section_diff { trunc_width = 75 }
+      local git_branch = MiniStatusline.section_git { trunc_width = 40 }
+
+      local git_diff = function()
+        if MiniStatusline.is_truncated(75) then return '' end
+
+        local added
+        local changed
+        local removed
+
+        --- - `vim.b.minidiff_summary` is a table with the following fields:
+        ---     - `source_name` - name of the active source. This is the only present field
+        ---       if buffer's reference text is not (yet) set.
+        ---     - `n_ranges` - number of hunk ranges (sequences of contiguous hunks).
+        ---     - `add` - number of added lines.
+        ---     - `change` - number of changed lines.
+        ---     - `delete` - number of deleted lines.
+        -- Credits to this blog post for the idea: https://tduyng.com/blog/neovim-statusline-native/
+        if vim.b.minidiff_summary ~= nil then
+          local summary = vim.b.minidiff_summary
+          added = summary.add or 0
+          changed = summary.change or 0
+          removed = summary.delete or 0
+        elseif vim.b.gitsigns_status_dict ~= nil then
+          local summary = vim.b.gitsigns_status_dict
+          added = summary.added or 0
+	        changed = summary.changed or 0
+	        removed = summary.removed or 0
+        else
+          return ''
+        end
+
+        local diff_str = ""
+        	if added > 0 then
+        		diff_str = diff_str .. "%$StatusDiffAdd$+" .. added 
+        	end
+        	if changed > 0 then
+        		diff_str = diff_str ..(string.len(diff_str) > 0 and ' ' or '') .. "%$StatusDiffChange$~" .. changed
+        	end
+        	if removed > 0 then
+        		diff_str = diff_str .. (string.len(diff_str) > 0 and ' ' or '') .. "%$StatusDiffDelete$-" .. removed
+        	end
+
+        local use_icons = MiniStatusline.use_icons or MiniStatusline.config.use_icons
+        local icon = use_icons and '' or 'Diff'
+        return icon .. ' ' .. (diff_str == '' and '-' or diff_str)
+      end
+
       local diagnostics = MiniStatusline.section_diagnostics {
         trunc_width = 75,
         signs = { ERROR = diagnosticSigns[1], WARN = diagnosticSigns[2], INFO = diagnosticSigns[3], HINT = diagnosticSigns[4] },
@@ -176,10 +228,9 @@ statusline.setup {
       end
 
       local filepathWithHighlights = function()
-            -- Aside: did a quick research and Lua `..` string concat is probably faster than string.format, neat.
-          local result = '%#MiniStatuslineFileDirectory#' .. getFileDirectory() .. '%#MiniStatuslineFilename#' .. getFileName()
-
-          -- TODO: Show CWD separately?
+          -- Using $ instead of # for the highlight groups to inherit the previous BG color.
+          -- Aside: did a quick research and Lua `..` string concat is probably faster than string.format, neat.
+          local result = '%$MiniStatuslineFileDirectory$' .. getFileDirectory() .. '%$MiniStatuslineFilename$' .. getFileName()
           return result
       end
 
@@ -189,7 +240,10 @@ statusline.setup {
 
       return MiniStatusline.combine_groups {
         { hl = mode_hl, strings = { string.upper(mode) } },
-        { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics } },
+        { hl = 'MiniStatuslineDevinfo', strings = { git_branch, git_diff(),
+          -- Clear foreground color that might've been set in git_diff.
+          '%#MiniStatuslineDevinfo#' .. diagnostics }
+        },
         '%<', -- Mark general truncate point
         -- Show file's directory in grayed-out text, then filename in brighter text.
         {
@@ -198,7 +252,10 @@ statusline.setup {
         },
         '%=', -- End left alignment
         -- Show file info in grayed-out text.
-        { hl = 'MiniStatuslineFileinfo', strings = { fileInfo() } },
+        { hl = 'MiniStatuslineDevinfo', strings = {
+            '%$MiniStatuslineFileinfo$' .. fileInfo()
+          }
+        },
         { hl = mode_hl, strings = { search, location() } },
       }
     end,
