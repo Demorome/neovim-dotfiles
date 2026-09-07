@@ -120,7 +120,8 @@ miniclue.setup {
     mini_ai_clue(),
 
     -- Enhance this by adding descriptions for <Leader> mapping groups.
-    { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
+    { mode = 'n', keys = '<Leader>a', desc = '+Arglist (bookmarks)' },
+    { mode = 'n', keys = '<Leader>d', desc = '+Debug' },
     { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
     { mode = 'n', keys = '<Leader>s', desc = '+Search' },
     { mode = 'n', keys = '<Leader>g', desc = '+Git' },
@@ -155,11 +156,20 @@ vim.keymap.set('n', '<leader>tt', '<Cmd>vertical term<CR>', { desc = 'Terminal (
 -- e is for 'Explore' and 'Edit'.
 --
 -- I think the location list is more intended for manually inserted / grep'd lines?
-vim.keymap.set('n', '<leader>eQ', vim.diagnostic.setloclist, { desc = 'Location [Q]uickfix list' })
+vim.keymap.set('n', '<leader>el', vim.diagnostic.setloclist, { desc = 'Location list' })
 
 -- WARN: This replaces the current error quick-fix list with the latest diagnostics (i.e. replaces compilation failure errors).
 -- This should rarely matter, unless you're building in a different configuration than the diagnostics is parsing for.
-vim.keymap.set('n', '<leader>eq', vim.diagnostic.setqflist, { desc = 'Diagnostics [Q]uickfix list' })
+vim.keymap.set('n', '<leader>ee', function()
+  local errorDiagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+  local result = '<cmd>lua vim.diagnostic.setqflist()<CR>'
+  if #errorDiagnostics > 0 then
+    -- Auto-filter the list for errors.
+    result = result .. '/error<CR>'
+  end
+  return result
+  -- return /error<CR>'
+end, { expr = true, desc = 'Diagnostics quickfix list' })
 
 local explore_quickfix = function()
   -- `h: cope` (unironically)
@@ -167,8 +177,9 @@ local explore_quickfix = function()
 end
 
 -- TIP: use `:colder` and `:cnewer` to manage multiple error lists.
-vim.keymap.set('n', '<leader>ee', explore_quickfix, { desc = '[E]rrors quickfix list' })
+vim.keymap.set('n', '<leader>ec', explore_quickfix, { desc = 'Compilation errors quickfix list' })
 vim.keymap.set('n', '<leader>ed', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Directory' })
+vim.keymap.set('n', '<leader>er', '<Cmd>lua MiniFiles.open(MiniFiles.get_latest_path())<CR>', { desc = 'Recent path' })
 vim.keymap.set('n', '<leader>ef', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', { desc = 'File directory' })
 
 -- l is for 'Language'. Common usage:
@@ -186,6 +197,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader>lf', function() require('conform').format 
 vim.keymap.set('n', '<leader>li', '<Cmd>lua vim.lsp.buf.implementation()<CR>', { desc = 'Implementation' })
 vim.keymap.set('n', '<leader>lh', '<Cmd>lua vim.lsp.buf.hover()<CR>', { desc = 'Hover' })
 vim.keymap.set('n', '<leader>ll', '<Cmd>lua vim.lsp.codelens.run()<CR>', { desc = 'Lens' })
+vim.keymap.set('n', '<leader>lq', '<Cmd>lsp restart<CR>', { desc = 'Restart' })
 vim.keymap.set('n', '<leader>lr', '<Cmd>lua vim.lsp.buf.rename()<CR>', { desc = 'Rename' })
 vim.keymap.set('n', '<leader>lR', '<Cmd>lua vim.lsp.buf.references()<CR>', { desc = 'References' })
 vim.keymap.set('n', '<leader>ls', '<Cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Source definition' })
@@ -202,17 +214,13 @@ vim.keymap.set('n', 'K', function()
   }
 end, { desc = 'LSP Info (Function docs, etc.)' })
 
+-- o is for Others.
+--vim.keymap.set('n', '<leader>ot', function() require('mini.trailspace')
+
 -- Disable copying for simple deletions.
 -- Credits to this blog post for this trick: https://vale.rocks/posts/neovim
 vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
 vim.keymap.set({ 'n', 'v' }, 'X', '"_X')
-
--- Quick-saving keybind.
--- Calling update has the advantage of not doing anything if the file wasn't changed.
-vim.keymap.set('n', '<leader>w', '<cmd>:echo "Saved file (no changes)"<CR><cmd>:update<CR>', { desc = 'Save the file' })
-
---  Map CTRL+Z to undo.
-vim.keymap.set('n', '<C-z>', 'u')
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -247,18 +255,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
-
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.hl.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function() vim.hl.on_yank() end,
-})
-
 --vim.keymap.set('', '<leader>y', '"+y', { desc = 'Yank to clipboard' }) -- E.g: <leader>yy will yank current line to os clipboard
 vim.keymap.set('', '<leader>Y', '"+y$', { desc = 'Yank until EOL to clipboard' })
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste after cursor from clipboard' })
@@ -269,5 +265,12 @@ vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor from clipb
 -- Taken from MiniMax.
 vim.keymap.set('n', '[p', '<Cmd>exe "iput! " . v:register<CR>', { desc = 'Paste Above' })
 vim.keymap.set('n', ']p', '<Cmd>exe "iput "  . v:register<CR>', { desc = 'Paste Below' })
+
+-- Allow CTRL+o to go back to original position after finishing visual selection.
+-- Credits to https://www.reddit.com/r/neovim/comments/zzr40r/how_can_i_go_back_to_the_original_position_if_i/
+vim.keymap.set('n', 'v', 'm`v', { noremap = true })
+vim.keymap.set('n', 'V', 'm`V', { noremap = true })
+vim.keymap.set('n', '<C-v>', 'm`<C-v>', { noremap = true })
+vim.keymap.set('v', '<Esc>', '<Esc>:keepjumps normal ``<CR>', { noremap = true, silent = true })
 
 -- vim: ts=2 sts=2 sw=2 et

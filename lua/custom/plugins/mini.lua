@@ -56,8 +56,8 @@ require('nvim-treesitter-textobjects').setup {
     -- and should return the mode ('v', 'V', or '<c-v>') or a table
     -- mapping query_strings to modes.
     selection_modes = {
-      ['@parameter.outer'] = 'v', -- charwise
-      ['@function.outer'] = 'V', -- linewise
+      --['@parameter.outer'] = 'v', -- charwise
+      --['@function.outer'] = 'V', -- linewise
       -- ['@class.outer'] = '<c-v>', -- blockwise
     },
     -- If you set this to `true` (default is `false`) then any textobject is

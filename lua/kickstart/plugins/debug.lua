@@ -8,25 +8,42 @@
 
 vim.pack.add {
   'https://github.com/mfussenegger/nvim-dap',
-  'https://github.com/rcarriga/nvim-dap-ui',
+  'https://github.com/igorlfs/nvim-dap-view',
+  -- 'https://github.com/rcarriga/nvim-dap-ui',
+
   'https://github.com/nvim-neotest/nvim-nio',
+
   'https://github.com/mason-org/mason.nvim',
   'https://github.com/jay-babu/mason-nvim-dap.nvim',
   --'https://github.com/leoluz/nvim-dap-go',
 }
 
 -- Basic debugging keymaps, feel free to change to your liking!
-vim.keymap.set('n', '<F5>', function() require('dap').continue() end, { desc = 'Debug: Start/Continue' })
-vim.keymap.set('n', '<F1>', function() require('dap').step_into() end, { desc = 'Debug: Step Into' })
-vim.keymap.set('n', '<F2>', function() require('dap').step_over() end, { desc = 'Debug: Step Over' })
-vim.keymap.set('n', '<F3>', function() require('dap').step_out() end, { desc = 'Debug: Step Out' })
-vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end, { desc = 'Debug: Toggle Breakpoint' })
-vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ') end, { desc = 'Debug: Set Breakpoint' })
--- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-vim.keymap.set('n', '<F7>', function() require('dapui').toggle() end, { desc = 'Debug: See last session result.' })
+vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end, { desc = 'DAP Continue' })
+vim.keymap.set('n', '<leader>dd', function() require('dap').toggle_breakpoint() end, { desc = 'DAP Toggle Breakpoint' })
+vim.keymap.set('n', '<leader>dx', function() require('dap').terminate() end, { desc = 'DAP Terminate' })
+
+vim.keymap.set('n', '<C-Up>', function() require('dap').restart_frame() end, { desc = 'DAP Restart Frame' })
+vim.keymap.set('n', '<C-Right>', function() require('dap').step_into() end, { desc = 'DAP Step Into' })
+vim.keymap.set('n', '<C-Down>', function() require('dap').step_over() end, { desc = 'DAP Step Over' })
+vim.keymap.set('n', '<C-Left>', function() require('dap').step_out() end, { desc = 'DAP Step Out' })
+
+-- Traverse the stacktrace without stepping.
+vim.keymap.set('n', '<S-Up>', function() require('dap').up() end, { desc = 'DAP Up' })
+vim.keymap.set('n', '<S-Down>', function() require('dap').down() end, { desc = 'DAP Down' })
 
 local dap = require 'dap'
-local dapui = require 'dapui'
+local dapview = require 'dap-view'
+
+-- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
+vim.keymap.set('n', '<leader>dr', function() dapview.toggle() end, { desc = 'DAP Last session result' })
+
+-- Taken from https://github.com/igorlfs/dotfiles/blob/main/nvim/.config/nvim/plugin/nvim-dap-view.lua
+vim.keymap.set('n', '<A-m>', '<CMD>DapViewToggle<CR>', { desc = 'Toggle DAP UI' })
+vim.keymap.set('n', '<A-v>', '<CMD>DapViewVirtualTextToggle<CR>', { desc = 'Toggle DAP Virtual Text' })
+
+-- Mirrors how I have shift-k to see LSP hover.
+vim.keymap.set({ 'n', 'x' }, '<C-k>', '<CMD>DapViewHover!<CR>', { desc = 'DAP Hover' })
 
 require('mason-nvim-dap').setup {
   -- Makes a best effort to setup the various debuggers with
@@ -41,31 +58,32 @@ require('mason-nvim-dap').setup {
   -- online, please don't ask me how to install them :)
   ensure_installed = {
     -- Update this to ensure that you have the debuggers for the langs you want
-   -- 'delve',
+    -- 'delve',
   },
 }
 
--- Dap UI setup
--- For more information, see |:help nvim-dap-ui|
----@diagnostic disable-next-line: missing-fields
-dapui.setup {
-  -- Set icons to characters that are more likely to work in every terminal.
-  --    Feel free to remove or use ones that you like more! :)
-  --    Don't feel like these are good choices.
-  icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-  ---@diagnostic disable-next-line: missing-fields
-  controls = {
-    icons = {
-      pause = '⏸',
-      play = '▶',
-      step_into = '⏎',
-      step_over = '⏭',
-      step_out = '⏮',
-      step_back = 'b',
-      run_last = '▶▶',
-      terminate = '⏹',
-      disconnect = '⏏',
+-- Defaults: https://igorlfs.github.io/nvim-dap-view/configuration
+dapview.setup {
+  winbar = {
+    show_keymap_hints = true,
+    sections = {
+      'watches',
+      'scopes',
+      'exceptions',
+      -- 'repl',
+      'breakpoints',
+      'threads',
+      'console',
     },
+    default_section = 'scopes',
+  },
+  virtual_text = {
+    -- Control with `DapViewVirtualTextToggle`
+    enabled = true,
+    format = function(variable) return ' ' .. (variable.value:gsub('\n+', '')) end,
+
+    -- Supported options include "inline", "eol", and "eol_right_align"
+    position = 'eol',
   },
 }
 
@@ -81,9 +99,9 @@ for type, icon in pairs(breakpoint_icons) do
   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
 end
 
-dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-dap.listeners.before.event_exited['dapui_config'] = dapui.close
+dap.listeners.after.event_initialized['dapui_config'] = dapview.open
+dap.listeners.before.event_terminated['dapui_config'] = dapview.close
+dap.listeners.before.event_exited['dapui_config'] = dapview.close
 
 -- Install golang specific config
 --require('dap-go').setup {

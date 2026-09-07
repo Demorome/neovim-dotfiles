@@ -67,7 +67,7 @@ vim.opt.incsearch = true --show matches as you type
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
-vim.opt.colorcolumn = '100' --show a column to discourage long lines
+vim.o.colorcolumn = '100' --show a column to discourage long lines
 
 --vim.opt.cmdheight = 1
 --vim.opt.pumheight = 5
@@ -101,7 +101,7 @@ vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
-vim.opt.sidescrolloff = 10
+vim.o.sidescrolloff = 10
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
