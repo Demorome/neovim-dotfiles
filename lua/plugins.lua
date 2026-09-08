@@ -1,5 +1,9 @@
 -- Load plugin modules in order.
 
+-- Purely visual tweaks.
+require 'custom.plugins.theme' -- set visual theme.
+require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
+
 require 'kickstart.plugins.gitsigns'
 
 require 'custom.plugins.mini' -- a bunch of mini plugins
@@ -28,9 +32,5 @@ require 'custom.plugins.better_quick_fix'
 
 -- A linter can do: style enforcement, error detection, code quality checks.
 require 'kickstart.plugins.lint'
-
--- Purely visual tweaks.
-require 'custom.plugins.theme' -- set visual theme.
-require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
 
 -- vim: ts=2 sts=2 sw=2 et
