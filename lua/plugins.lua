@@ -4,6 +4,10 @@
 require 'custom.plugins.theme' -- set visual theme.
 require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
 
+-- Enable built-in :UndoTree.
+vim.cmd 'packadd nvim.undotree'
+vim.keymap.set('n', '<leader>u', require('undotree').open, { desc = 'Undotree' })
+
 require 'kickstart.plugins.gitsigns'
 
 require 'custom.plugins.mini' -- a bunch of mini plugins
