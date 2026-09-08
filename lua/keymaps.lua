@@ -1,6 +1,22 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Credits to ThePrimeagen for some of these:
+-- https://github.com/ThePrimeagen/init.lua/blob/249f3b14cc517202c80c6babd0f9ec548351ec71/lua/theprimeagen/remap.lua#L5-L12
+--
+-- Allows moving visual selection easily, with auto-indentation.
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Tweak J to join lines better, somehow.
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- Centering when doing certain jump motions.
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
 -- Add alternate Undo, since default U is not very helpful anyways.
 vim.keymap.set('n', 'U', '<cmd>redo<CR>', { desc = 'Redo' })
 
