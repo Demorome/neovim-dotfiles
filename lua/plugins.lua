@@ -12,6 +12,8 @@ require 'custom.plugins.lspconfig'
 require 'kickstart.plugins.conform'
 require 'custom.plugins.autocomplete'
 require 'kickstart.plugins.treesitter'
+require 'custom.plugins.side-view' -- depends on LSP/Treesitter
+
 require 'custom.plugins.better_quick_fix'
 require 'kickstart.plugins.debug'
 require 'kickstart.plugins.indent_line'
@@ -27,8 +29,6 @@ require 'custom.plugins.easy-dotnet-nvim'
 require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
 require 'custom.plugins.nvim-orgmode'
 require 'custom.plugins.lazygit'
-require 'custom.plugins.bookmarks' -- adds bookmarks
-
--- TODO: Set up rainbow delimiters plugin
+require 'custom.plugins.bookmarks'
 
 -- vim: ts=2 sts=2 sw=2 et
