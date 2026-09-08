@@ -12,7 +12,6 @@ require 'custom.plugins.lspconfig'
 require 'kickstart.plugins.conform'
 require 'custom.plugins.autocomplete'
 require 'kickstart.plugins.treesitter'
-require 'custom.plugins.side-view' -- depends on LSP/Treesitter
 
 require 'custom.plugins.better_quick_fix'
 require 'kickstart.plugins.debug'
