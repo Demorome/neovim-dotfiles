@@ -9,7 +9,6 @@ vim.opt.softtabstop = 4 -- no idea?
 vim.opt.expandtab = true -- use spaces instead of tab
 
 vim.opt.smartindent = true
-vim.opt.autoindent = true
 
 -- Folding options
 -- Default keymaps: 'zR' opens all, 'zM' closes all, 'za' toggles for fold at cursor.
@@ -19,10 +18,9 @@ vim.opt.foldlevelstart = 99
 vim.opt.foldnestmax = 4
 
 -- More VSCode-like side-column symbols.
--- TODO: Entering 'restart' seems to undo the foldcolumn setting here?? But only for my CSharp files??
-vim.opt.foldcolumn = '1'
-vim.opt.fillchars:append { fold = ' ', foldopen = '󰅀', foldclose = '󰅂', foldsep = ' ', foldinner = ' ' }
-vim.opt.foldtext = ''
+-- vim.opt.foldcolumn = '1'
+-- vim.opt.fillchars:append { fold = ' ', foldopen = '󰅀', foldclose = '󰅂', foldsep = ' ', foldinner = ' ' }
+-- vim.opt.foldtext = ''
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
