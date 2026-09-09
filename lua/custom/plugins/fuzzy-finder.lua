@@ -65,9 +65,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = 'Curren
 vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = 'Grep' })
 vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = 'Diagnostics' })
 vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = 'Resume' })
-vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = 'Recent Files' })
+vim.keymap.set('n', '<leader><leader>', builtin.oldfiles, { desc = 'Recent Files' })
 vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = 'Commands' })
-vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Buffers' })
+vim.keymap.set('n', '<leader>.', builtin.buffers, { desc = 'Buffers' })
 
 -- Override default behavior and theme when searching
 vim.keymap.set('n', '<leader>sb', function()
