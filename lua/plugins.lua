@@ -5,6 +5,7 @@ require 'custom.plugins.theme' -- set visual theme.
 require 'kickstart.plugins.todo-comments' -- highlight TODO etc. comments
 
 -- Enable built-in :UndoTree.
+-- This is useful to view different 'branches' of changes, if we accidentally clobber our undo/redo history.
 vim.cmd 'packadd nvim.undotree'
 vim.keymap.set('n', '<leader>u', require('undotree').open, { desc = 'Undotree' })
 
@@ -24,7 +25,6 @@ require 'custom.plugins.easy-dotnet-nvim'
 require 'custom.plugins.directory-viewer'
 
 -- Load order for these shouldn't matter
-require 'custom.plugins.project' -- make file searching go through entire project, instead of current subdirectory
 require 'custom.plugins.nvim-orgmode' -- TODO: Replace with a simple markdown alternative, w/ task support?
 require 'custom.plugins.lazygit' -- TODO: Replace with futigive?
 require 'custom.plugins.bookmarks'
