@@ -33,6 +33,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
 })
 
 -- Auto-save file when running project commands.
+-- TODO: Vim has a built-in option for this that runs for :make and others: `h `
 -- TODO: Save ALL files in open buffers!
 local projectCommands = { 'Dotnet', 'make', 'Git' }
 vim.api.nvim_create_autocmd('CmdlineLeave', {
@@ -51,4 +52,13 @@ vim.api.nvim_create_autocmd('BufEnter', {
   group = gr,
   pattern = { '*.md' },
   callback = function() vim.opt_local.spell = true end,
+})
+
+-- Automatically trim trailing whitespace.
+-- WARNING: In some jank languages, like VimScript, trailing whitespace can have meaning!
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  group = gr,
+  pattern = '*',
+  command = [[%s/\s\+$//e]], -- /e to suppress errors if no matches were found.
+  desc = 'Automatically trim trailing whitespace',
 })
