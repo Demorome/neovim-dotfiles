@@ -257,6 +257,7 @@ vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste after cursor from clipbo
 vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor' })
 -- greatest remap ever - ThePrimeAgen
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste without clobbering' })
+vim.keymap.set('x', '<leader>P', [["_d"+P]], { desc = 'Paste from clipboard' })
 
 -- Paste linewise before/after current line
 -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
