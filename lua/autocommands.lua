@@ -12,13 +12,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
--- Update the current file when entering Terminal mode,
--- since I've probably already forgotten to save the file.
-vim.api.nvim_create_autocmd({ 'TermEnter' }, {
-  group = gr,
-  command = 'silent! update',
-})
-
 -- Credits to Mini.Basics: https://github.com/nvim-mini/mini.basics/blob/main/lua/mini/basics.lua
 local start_terminal_insert = vim.schedule_wrap(function(data)
   -- Try to start terminal mode only if target terminal is current
