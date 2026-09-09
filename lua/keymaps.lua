@@ -248,10 +248,11 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
---vim.keymap.set('', '<leader>y', '"+y', { desc = 'Yank to clipboard' }) -- E.g: <leader>yy will yank current line to os clipboard
-vim.keymap.set('', '<leader>Y', '"+y$', { desc = 'Yank until EOL to clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to clipboard' }) -- E.g: <leader>yy will yank current line to os clipboard
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste after cursor from clipboard' })
-vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor from clipboard' })
+vim.keymap.set('n', '<leader>P', '"+P', { desc = 'Paste before cursor' })
+-- greatest remap ever - ThePrimeAgen
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste without clobbering' })
 
 -- Paste linewise before/after current line
 -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
