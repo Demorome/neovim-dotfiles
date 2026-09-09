@@ -162,9 +162,7 @@ miniclue.setup {
 }
 
 -- Some keymaps from MiniMax: https://github.com/nvim-mini/MiniMax/blob/main/configs/nvim-0.13/plugin/20_keymaps.lua
-vim.keymap.set('n', '[p', '<Cmd>exe "iput! " . v:register<CR>', { desc = 'Paste Above' })
-vim.keymap.set('n', ']p', '<Cmd>exe "iput "  . v:register<CR>', { desc = 'Paste Below' })
-
+--
 -- t is for 'Toggle' (and toggleterm / toggling terminals).
 vim.keymap.set('n', '<leader>tT', '<Cmd>horizontal term<CR>', { desc = 'Terminal (horizontal)' })
 vim.keymap.set('n', '<leader>tt', '<Cmd>vertical term<CR>', { desc = 'Terminal (vertical)' })
@@ -249,12 +247,6 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
