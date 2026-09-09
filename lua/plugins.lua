@@ -28,10 +28,11 @@ require 'custom.plugins.directory-viewer'
 -- Load order for these shouldn't matter
 require 'custom.plugins.nvim-orgmode' -- TODO: Replace with a simple markdown alternative, w/ task support?
 require 'custom.plugins.lazygit' -- TODO: Replace with futigive?
+require 'custom.plugins.git-fugitive'
 require 'custom.plugins.bookmarks'
 
 -- require 'kickstart.plugins.guess-indent'
-require 'kickstart.plugins.autopairs'
+-- require 'kickstart.plugins.autopairs'
 require 'custom.plugins.better_quick_fix'
 
 -- A linter can do: style enforcement, error detection, code quality checks.

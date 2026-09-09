@@ -160,6 +160,10 @@
       "rev": "45c33076f73b5d290de0f8ed3dc3b55c6b5456a4",
       "src": "https://github.com/mrpbennett/vault"
     },
+    "vim-fugitive": {
+      "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
+      "src": "https://github.com/tpope/vim-fugitive"
+    },
     "volt": {
       "rev": "620de1321f275ec9d80028c68d1b88b409c0c8b1",
       "src": "https://github.com/nvzone/volt"
