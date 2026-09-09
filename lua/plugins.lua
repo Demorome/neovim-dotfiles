@@ -15,7 +15,7 @@ require 'kickstart.plugins.gitsigns'
 require 'custom.plugins.mini' -- a bunch of mini plugins
 require 'custom.plugins.fuzzy-finder'
 require 'custom.plugins.lspconfig'
-
+require 'custom.plugins.refactor'
 require 'custom.plugins.conform'
 require 'custom.plugins.autocomplete' -- TODO: Migrate to native autocomplete once it supports multiple sources (snippets, etc.)
 require 'custom.plugins.treesitter'
