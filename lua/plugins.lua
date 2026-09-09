@@ -13,6 +13,7 @@ vim.keymap.set('n', '<leader>u', require('undotree').open, { desc = 'Undotree' }
 require 'kickstart.plugins.gitsigns'
 
 require 'custom.plugins.mini' -- a bunch of mini plugins
+require 'custom.plugins.statusline'
 require 'custom.plugins.fuzzy-finder'
 require 'custom.plugins.lspconfig'
 require 'custom.plugins.refactor'
@@ -30,6 +31,8 @@ require 'custom.plugins.nvim-orgmode' -- TODO: Replace with a simple markdown al
 require 'custom.plugins.lazygit' -- TODO: Replace with futigive?
 require 'custom.plugins.git-fugitive'
 require 'custom.plugins.bookmarks'
+require 'custom.plugins.search-motion'
+require 'custom.plugins.project-cwd-rooter'
 
 -- require 'kickstart.plugins.guess-indent'
 -- require 'kickstart.plugins.autopairs'
