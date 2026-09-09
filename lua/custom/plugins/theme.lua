@@ -10,7 +10,7 @@ local function gh(repo) return 'https://github.com/' .. repo end
 -- Fallout terminal-themed color palette.
 local palette = {
   -- UI color options from Fallout: New Vegas, mostly for inspiration.
-  fnv_orange = '#ffb642',
+  fnv_amber = '#ffb642',
   fnv_blue = '#2ecfff',
   fnv_green = '#1bff80',
   fnv_white = '#c0ffff',
@@ -29,16 +29,16 @@ local palette = {
 
   -- Derived semantic colors (Phase 2) — stay in amber-green-black space
   amber_phosphor_dim = '#918200',
-  fnv_orange_dim = '#Ff9000',
-  fnv_orange_quite_dim = '#bf6e00',
-  fnv_orange_very_dim = '#8c6e00', -- VERY dim, useful for grayed-out text
+  fnv_amber_no_blue = '#ffb600',
+  fnv_amber_quite_dim = '#bf6e00',
   warm_rust = '#cc4400', -- warm rust-red — DiagnosticError, git delete
   dim_rust = '#892d00',
   amber_orange = '#c87000', -- amber-orange — DiagnosticWarn
   muted_lime = '#7aaa00', -- muted lime — DiagnosticInfo
   dark_green = '#2a3a00', -- dark green-tinted bg — Visual, selection bg
   warm_mid_amber = '#4a4200', -- warm mid-amber bg — Search highlight bg
-  pure_black = '#000000',
+  dark_mid_amber = '#2a2200', -- warm mid-amber bg — Search highlight bg
+  nearer_black = '#000100', -- for inactive window bg
 
   -- Derived git diff tints (Phase 3) — very subtle near-black bg tints for gitsigns line/word highlights
   near_black_faint_green = '#0a1200', -- near-black, faint green cast  — GIT-02 (GitSignsAddLn)
@@ -52,7 +52,7 @@ require('kanagawa').setup {
   compile = false, -- enable compiling the colorscheme
   undercurl = true, -- enable undercurls
   commentStyle = { italic = false, bold = false },
-  functionStyle = { italic = false, bold = true }, -- make function names and calls stand out more
+  functionStyle = { italic = false, bold = false },
   keywordStyle = { italic = false, bold = false },
   statementStyle = { italic = false, bold = false },
   typeStyle = { italic = false, bold = false },
@@ -73,19 +73,19 @@ require('kanagawa').setup {
           fg_dim = palette.amber_phosphor_dim,
           fg_reverse = palette.green,
 
-          bg_dim = palette.pure_black, -- bg when window is inactive and dimming for inactive windows is enabled
+          bg_dim = palette.nearer_black, -- bg when window is inactive and dimming for inactive windows is enabled
           bg_gutter = palette.near_black,
 
-          -- bg_m3 = palette.fnv_orange, -- darkest. Affects fg color of some text in taskline (wtf?)
-          -- bg_m2 = palette.fnv_orange, -- less dark
-          -- bg_m1 = palette.fnv_orange, -- even less dark. No idea what this even changes.
+          -- bg_m3 = palette.fnv_amber, -- darkest. Affects fg color of some text in taskline (wtf?)
+          -- bg_m2 = palette.fnv_amber, -- less dark
+          -- bg_m1 = palette.fnv_amber, -- even less dark. No idea what this even changes.
           bg = palette.near_black,
           bg_p1 = palette.warm_near_black_ui_bg, -- even less dark x2. Affects line-limit-column-guide color and bg color of some taskline stuff.
           bg_p2 = palette.warm_near_black_ui_bg, -- even less dark x3. Affects cursor highlight color.
 
-          special = palette.dark_green, -- was: dragongray3
-          whitespace = palette.near_black_faint_green, -- least dark
-          nontext = palette.dim_amber, -- least dark
+          special = palette.warm_mid_amber, -- was: dragongray3
+          whitespace = palette.dark_mid_amber, -- was: least dark
+          nontext = palette.dim_amber, -- was: least dark
 
           bg_visual = palette.dark_green,
           bg_search = palette.warm_mid_amber,
@@ -114,10 +114,10 @@ require('kanagawa').setup {
           constant = palette.amber_phosphor, -- TODO: Set a bit brighter?
           identifier = palette.amber_phosphor, -- was: dragonYellow
           parameter = palette.amber_phosphor, -- was: dragonGray
-          fun = palette.fnv_orange_dim,
+          fun = palette.fnv_amber_no_blue,
           statement = palette.amber_phosphor, -- was: dragonViolet. Doesn't seem to do anything, at least in C# code?
           keyword = palette.matrix_green, -- was: dragonViolet
-          operator = palette.fnv_orange_quite_dim, -- was: dragonRed (more of light pink-ish orange)
+          operator = palette.fnv_amber_quite_dim, -- was: dragonRed (more of light pink-ish orange)
           preproc = palette.dim_rust, -- was: dragonRed
           type = palette.green, -- was: dragonAqua
           regex = palette.dim_rust, -- was: dragonRed
@@ -130,7 +130,7 @@ require('kanagawa').setup {
         },
         diag = {
           error = palette.warm_rust, -- was: samuraiRed
-          warning = palette.amber_orange, --FIXME: This doesn't seem to apply in the statusline!
+          warning = palette.amber_orange,
           ok = palette.green,
           info = palette.muted_lime,
           hint = palette.dim_amber,
@@ -155,7 +155,7 @@ require('kanagawa').setup {
           palette.near, -- black → terminal bg
           palette.warm_rust, -- red → warm rust-red
           palette.green, -- green → Matrix green
-          palette.fnv_orange_dim, -- yellow → amber primary
+          palette.fnv_amber_no_blue, -- yellow → amber primary
           palette.dim_amber, -- blue slot → dim amber (in-palette)
           palette.dim_amber, -- magenta slot → dim amber (in-palette)
           palette.muted_lime, -- cyan slot → lime string green
@@ -181,6 +181,12 @@ require('kanagawa').setup {
   theme = 'wave', --'dragon' is pretty good, but our custom one is cooler.
 }
 vim.cmd 'colorscheme kanagawa'
+
+-- TODO: Use `overrides` instead?
+vim.api.nvim_set_hl(0, 'MiniStatuslineFileDirectory', { fg = palette.dim_amber })
+vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = palette.amber_phosphor, bold = true })
+vim.api.nvim_set_hl(0, 'MiniStatuslineFilenameChanged', { fg = palette.green, bold = true })
+vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { fg = palette.dim_amber })
 
 --vim.pack.add { gh 'folke/tokyonight.nvim' }
 ---@diagnostic disable-next-line: missing-fields
