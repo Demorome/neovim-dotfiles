@@ -217,6 +217,10 @@ vim.keymap.set('n', '<leader>lR', '<Cmd>lua vim.lsp.buf.references()<CR>', { des
 vim.keymap.set('n', '<leader>ls', '<Cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Source definition' })
 vim.keymap.set('n', '<leader>lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', { desc = 'Type definition' })
 
+-- From ThePrimeagen
+-- Helpful to see info about a parameter you're filling in.
+vim.keymap.set('i', '<C-h>', function() vim.lsp.buf.signature_help() end)
+
 vim.keymap.set('x', '<leader>lf', '<Cmd>lua require("conform").format()<CR>', { desc = 'Format selection' })
 
 -- Non-leader shortcut for toggling LSP hover.
