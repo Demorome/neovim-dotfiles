@@ -94,13 +94,6 @@ vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
 -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
--- Useful status updates for LSP.
-vim.pack.add { gh 'j-hui/fidget.nvim' }
-require('fidget').setup {
-  -- TODO: Change text color to be darker, to blend in with background!
-  --done_style = vim.api.nvim_get_hl()
-}
-
 --  This function gets run when an LSP attaches to a particular buffer.
 --    That is to say, every time a new file is opened that is associated with
 --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
