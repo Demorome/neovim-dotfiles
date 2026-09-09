@@ -234,8 +234,6 @@ require('mini.statusline').setup {
           return result
       end
 
-      -- Set cursor location to LINE:COLUMN
-      local location = function() return '%2l:%-2v' end
       local search = MiniStatusline.section_searchcount { trunc_width = 75 }
 
       return MiniStatusline.combine_groups {
@@ -256,7 +254,7 @@ require('mini.statusline').setup {
             '%$MiniStatuslineFileinfo$' .. fileInfo()
           }
         },
-        { hl = mode_hl, strings = { search, location() } },
+        { hl = mode_hl, strings = { search } },
       }
     end,
   },
