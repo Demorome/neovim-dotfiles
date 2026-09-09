@@ -65,6 +65,7 @@ vim.opt.incsearch = true --show matches as you type
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
+
 vim.o.colorcolumn = '100' --show a column to discourage long lines
 
 --vim.opt.cmdheight = 1
@@ -95,7 +96,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
-vim.o.cursorline = true
+-- vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
