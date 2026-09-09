@@ -281,4 +281,8 @@ vim.keymap.set('n', 'V', 'm`V', { noremap = true })
 vim.keymap.set('n', '<C-v>', 'm`<C-v>', { noremap = true })
 vim.keymap.set('v', '<Esc>', '<Esc>:keepjumps normal ``<CR>', { noremap = true, silent = true })
 
+-- Quickly set up a substitution command for a selection.
+-- Credits to ThePrimeagen.
+vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace selection' })
+
 -- vim: ts=2 sts=2 sw=2 et
