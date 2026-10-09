@@ -55,3 +55,60 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   command = [[%s/\s\+$//e]], -- /e to suppress errors if no matches were found.
   desc = 'Automatically trim trailing whitespace',
 })
+
+-- Don't get rid of autoindent when switching to normal mode or moving cursor.
+--
+-- Credits: u/dropdtech and u/catphish_ :
+-- https://www.reddit.com/r/neovim/comments/1qu6060/how_can_i_disable_the_feature_that_gets_rid_of/
+local function apply_ts_indent_if_blank()
+  local buf = vim.api.nvim_get_current_buf()
+  local lnum = vim.api.nvim_win_get_cursor(0)[1]
+  local line = vim.api.nvim_buf_get_lines(buf, lnum - 1, lnum, false)[1]
+  if line ~= '' then return end
+  -- check if indentexpr is set before evaluating
+  local indentexpr = vim.bo.indentexpr
+  if indentexpr == '' or indentexpr == nil then return end
+  -- get indent from indentexpr (Tree-sitter or fallback)
+  local old_lnum = vim.v.lnum
+  vim.v.lnum = lnum
+  local indent = vim.fn.eval(vim.bo.indentexpr)
+  vim.v.lnum = old_lnum
+  if indent > 0 then vim.api.nvim_buf_set_lines(buf, lnum - 1, lnum, false, { string.rep(' ', indent) }) end
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('$', true, false, true), 'n', true)
+end
+-- apply indent on InsertLeave
+vim.api.nvim_create_autocmd('InsertLeave', {
+  callback = apply_ts_indent_if_blank,
+})
+-- apply indent in insert cursor move
+vim.api.nvim_create_autocmd('CursorMovedI', {
+  callback = function()
+    -- store the line we're leaving
+    local buf = vim.api.nvim_get_current_buf()
+    local prev_line = vim.b.previous_insert_line or 0
+    local current_line = vim.api.nvim_win_get_cursor(0)[1]
+    -- if moved, restore on previous line
+    if prev_line ~= current_line and prev_line > 0 then
+      local line = vim.api.nvim_buf_get_lines(buf, prev_line - 1, prev_line, false)[1]
+      if line == '' then
+        local old_lnum = vim.v.lnum
+        vim.v.lnum = prev_line
+
+        -- Fix by Demorome: an error here occured when doing backspace/enter around empty lines;
+        -- vim.bo.indentexpr becomes "" for some reason (could be my setup).
+        local indent
+        local indentexpr = vim.bo.indentexpr
+        if indentexpr == '' or indentexpr == nil then
+          indent = 0
+        else
+          indent = vim.fn.eval(vim.bo.indentexpr)
+        end
+
+        vim.v.lnum = old_lnum
+        if indent > 0 then vim.api.nvim_buf_set_lines(buf, prev_line - 1, prev_line, false, { string.rep(' ', indent) }) end
+      end
+    end
+    -- store current line for future
+    vim.b.previous_insert_line = current_line
+  end,
+})
