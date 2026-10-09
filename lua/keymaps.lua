@@ -1,6 +1,14 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Shortcut for commenting.
+-- Credits to @vianneychin and @RVPLiu:
+-- https://github.com/neovim/neovim/discussions/29075#discussioncomment-13174716
+vim.keymap.set({ 'v', 'n', 'o', 'x' }, '#', function()
+  local count = vim.v.count
+  vim.cmd.norm((count > 0 and count or '') .. 'gcc')
+end)
+
 -- Credits to ThePrimeagen for some of these:
 -- https://github.com/ThePrimeagen/init.lua/blob/249f3b14cc517202c80c6babd0f9ec548351ec71/lua/theprimeagen/remap.lua#L5-L12
 --
@@ -140,7 +148,8 @@ miniclue.setup {
     { mode = 'n', keys = '<Leader>d', desc = '+Debug' },
     { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
     { mode = 'n', keys = '<Leader>s', desc = '+Search' },
-    { mode = 'n', keys = '<Leader>g', desc = '+Git' },
+    { mode = 'n', keys = '<Leader>g', desc = 'Lazygit' },
+    { mode = 'n', keys = '<Leader>G', desc = '+Git' },
     { mode = 'n', keys = '<Leader>l', desc = '+Language' },
     -- { mode = 'n', keys = '<Leader>m', desc = '+Map' },
     { mode = 'n', keys = '<Leader>o', desc = '+Other' },

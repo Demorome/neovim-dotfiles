@@ -28,11 +28,11 @@ require 'custom.plugins.directory-viewer'
 
 -- Load order for these shouldn't matter
 require 'custom.plugins.nvim-orgmode' -- TODO: Replace with a simple markdown alternative, w/ task support?
-require 'custom.plugins.lazygit' -- TODO: Replace with futigive?
-require 'custom.plugins.git-fugitive'
+require 'custom.plugins.lazygit'
 require 'custom.plugins.bookmarks'
 require 'custom.plugins.search-motion'
 require 'custom.plugins.project-cwd-rooter'
+require 'custom.plugins.auto-session'
 
 -- require 'kickstart.plugins.guess-indent'
 -- require 'kickstart.plugins.autopairs'
