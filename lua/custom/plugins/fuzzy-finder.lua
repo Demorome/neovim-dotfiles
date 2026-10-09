@@ -41,7 +41,11 @@ require('telescope').setup {
   --  All the info you're looking for is in `:help telescope.setup()`
   --
   defaults = {
-    layout_config = { preview_width = 0.6 },
+    layout_config = {
+      width = { padding = 0 },
+      height = { padding = 0 },
+      preview_width = 0.6,
+    },
     --   mappings = {
     --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
     --   },
